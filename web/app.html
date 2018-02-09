@@ -5,64 +5,29 @@
     <title>Qpost</title>
 
     <script type='text/javascript' src='/eel.js'></script>
-
     <script src="/js/react.production.min.js"></script>
     <script src="/js/react-dom.production.min.js"></script>
     <script src="/js/babel.min.js"></script>
 
     <link rel="stylesheet" type="text/css" href="/css/bulma.min.css" />
     <link rel="shortcut icon" type="image/png" href="/img/favicon.ico" />
-
-    <script type='text/javascript'>
-
-        async function cleantime() {
-            let cleantime = await eel.cleantime()();
-            console.log(cleantime);
-        }
-
-    </script>
-
 </head>
 
 <body>
     <div id="root"></div>
 
     <script type="text/babel">
+
         class PathInput extends React.Component {
-
-            state = {}
-
-            async cleantime() {
-                let cleantime = await eel.cleantime()();
-                console.log(cleantime);
-            }
-
-
-            setStateAsync(state)
-            {
-                return new Promise((resolve) => {
-                    this.setState(state, resolve)
-                });
-            }
-
-
-            async componentDidMount()
-            {
-                let cleantime = await eel.cleantime()();
-                await this.setStateAsync({cleantime: cleantime});
-            }
-
-
-            render() {
+             render() {
                 return (
                     <section className="hero is-fullheight">
                         <div className="hero-body">
                             <div className="container">
                                 <nav className="level">
                                     <div className="level-item">
-                                        <input className="input" type="text" placeholder="Paste your path here and click 'Scan'" />
-                                        <button className="button">Scan</button>
-                                        {this.state.cleantime}
+                                        <input className="input" onChange={this.props.updatePath} type="text" placeholder="Paste your path here and click 'Scan'" />
+                                        <button className="button" onClick={this.props.scanPath}>Scan</button>
                                     </div>
                                 </nav>
                             </div>
@@ -73,13 +38,86 @@
         }
 
 
-        class Main extends React.Component {
+        class Post extends React.Component {
             render() {
                 return (
                     <div>
-                        <PathInput />
+                        <p>{this.props.name}</p>
+                        {/*<img src={this.props.image} alt={this.props.name} />*/}
                     </div>
                 );
+            }
+        }
+
+
+        class PostsCollection extends React.Component {
+            render() {
+                return (
+                    <div>
+                        <Post name={this.props.name} />
+                    </div>
+                );
+            }
+        }
+
+
+        class Main extends React.Component {
+
+            state = {
+                hasPath : false,
+                path : ''
+            }
+
+
+            constructor(props) {
+                super(props);
+
+                this.updatePath = this.updatePath.bind(this);
+                this.scanPath = this.scanPath.bind(this);
+            }
+
+
+            updatePath(e)
+            {
+                this.setState({
+                    path : e.target.value
+                });
+            }
+
+            scanPath(e) {
+                this.setState({
+                    hasPath : true
+                });
+            }
+
+
+            renderPathInput() {
+                return (
+                    <div>
+                        <PathInput updatePath={this.updatePath} scanPath={this.scanPath} />
+                    </div>
+                );
+            }
+
+            renderPosts(name) {
+                return (
+                    <section class="section">
+                        <div class="container">
+                            <PostsCollection name={name} />
+                        </div>
+                    </section>
+                );
+            }
+
+            render() {
+                if (this.state.hasPath)
+                {
+                    return this.renderPosts(this.state.path);
+                }
+                else
+                {
+                    return this.renderPathInput();
+                }
             }
         }
 
