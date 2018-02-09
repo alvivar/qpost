@@ -1,0 +1,18 @@
+
+    #1
+        {
+            Paste here the path: [__________]
+            [Scan]
+        }
+
+
+    #2
+        {
+            [Generate qbot.json]
+        }
+        {
+            Message text [edit]
+            Image found
+            [up] [down] [delete]
+        }
+

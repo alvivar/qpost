@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Qpost</title>
+
+    <script type='text/javascript' src='/eel.js'></script>
+    <script src="/js/react.production.min.js"></script>
+    <script src="/js/react-dom.production.min.js"></script>
+    <script src="/js/babel.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/bulma.min.css" />
+    <link rel="shortcut icon" type="image/png" href="/img/favicon.ico" />
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+
+
+        class PathInput extends React.Component {
+            render() {
+                return (
+                    <section className="hero is-fullheight">
+                        <div className="hero-body">
+                            <div className="container">
+                                <nav className="level">
+                                    <div className="level-item">
+                                        <input className="input" type="text" placeholder="Paste your path here and click 'Scan'"/>
+                                        <button className="button">Scan</button>
+                                    </div>
+                                </nav>
+                            </div>
+                        </div>
+                    </section>
+                );
+            }
+        }
+
+
+        class Main extends React.Component {
+            render() {
+                return (
+                    <div>
+                        <PathInput />
+                    </div>
+                );
+            }
+        }
+
+
+        ReactDOM.render(
+            <Main />,
+            document.getElementById('root')
+        );
+
+    </script>
+</body>
+
+</html>
