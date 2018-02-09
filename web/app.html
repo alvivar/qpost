@@ -54,6 +54,7 @@
             render() {
                 return (
                     <div>
+                        <button className="button" onClick={this.props.clearPath}>Go back</button>
                         <Post name={this.props.name} />
                     </div>
                 );
@@ -72,21 +73,29 @@
             constructor(props) {
                 super(props);
 
-                this.updatePath = this.updatePath.bind(this);
-                this.scanPath = this.scanPath.bind(this);
+                this.updatePathOnChange = this.updatePathOnChange.bind(this);
+                this.scanPathOnClick = this.scanPathOnClick.bind(this);
+                this.clearPathOnClick = this.clearPathOnClick.bind(this);
             }
 
 
-            updatePath(e)
+            updatePathOnChange(e)
             {
                 this.setState({
                     path : e.target.value
                 });
             }
 
-            scanPath(e) {
+            scanPathOnClick(e) {
                 this.setState({
                     hasPath : true
+                });
+            }
+
+            clearPathOnClick(e) {
+                this.setState({
+                    hasPath : false,
+                    path : false
                 });
             }
 
@@ -94,7 +103,7 @@
             renderPathInput() {
                 return (
                     <div>
-                        <PathInput updatePath={this.updatePath} scanPath={this.scanPath} />
+                        <PathInput updatePath={this.updatePathOnChange} scanPath={this.scanPathOnClick} />
                     </div>
                 );
             }
@@ -103,7 +112,7 @@
                 return (
                     <section class="section">
                         <div class="container">
-                            <PostsCollection name={name} />
+                            <PostsCollection name={name} clearPath={this.clearPathOnClick} />
                         </div>
                     </section>
                 );
