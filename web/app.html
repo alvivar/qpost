@@ -26,7 +26,7 @@
                             <div className="container">
                                 <nav className="level">
                                     <div className="level-item">
-                                        <input className="input" onChange={this.props.updatePath} type="text" placeholder="Paste your path here and click 'Scan'" />
+                                        <input className="input" value={this.props.path} onChange={this.props.updatePath} type="text" placeholder="Paste your path here and click 'Scan'" />
                                         <button className="button" onClick={this.props.scanPath}>Scan</button>
                                     </div>
                                 </nav>
@@ -64,14 +64,13 @@
 
         class Main extends React.Component {
 
-            state = {
-                hasPath : false,
-                path : ''
-            }
-
-
             constructor(props) {
                 super(props);
+
+                this.state = {
+                    hasPath : false,
+                    path : ''
+                }
 
                 this.updatePathOnChange = this.updatePathOnChange.bind(this);
                 this.scanPathOnClick = this.scanPathOnClick.bind(this);
@@ -94,8 +93,7 @@
 
             clearPathOnClick(e) {
                 this.setState({
-                    hasPath : false,
-                    path : false
+                    hasPath : false
                 });
             }
 
@@ -103,7 +101,7 @@
             renderPathInput() {
                 return (
                     <div>
-                        <PathInput updatePath={this.updatePathOnChange} scanPath={this.scanPathOnClick} />
+                        <PathInput path={this.state.path} updatePath={this.updatePathOnChange} scanPath={this.scanPathOnClick} />
                     </div>
                 );
             }
