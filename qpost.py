@@ -6,6 +6,15 @@
 """
 
 import eel
+import time
 
 eel.init('web')
-eel.start('app.html', size=(550, 300))
+
+
+@eel.expose
+def cleantime():
+    return str(round(time.time()))
+
+
+print(cleantime())
+eel.start('app.html', size=(600, 300))
