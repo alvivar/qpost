@@ -1,8 +1,7 @@
 
     #1
         {
-            Paste here the path: [__________]
-            [Scan]
+            [  Paste here the path  ] [Scan]
         }
 
 
@@ -15,4 +14,3 @@
             Image found
             [up] [down] [delete]
         }
-
