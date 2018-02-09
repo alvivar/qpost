@@ -1,0 +1,6 @@
+
+        HACKS
+
+
+Render after a promise in React
+https://medium.com/front-end-hacking/async-await-with-react-lifecycle-methods-802e7760d802
