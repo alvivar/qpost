@@ -36,6 +36,6 @@ def get_files_dirs(path):
     return files, dirs
 
 
-eel.start('app.html', size=(600, 300))
+eel.start('app.html', size=(700, 500))
 
 # print(get_files_dirs(r'D:\Dropbox\Public\games\gif'))
