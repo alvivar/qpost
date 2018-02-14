@@ -6,16 +6,17 @@
 """
 
 import os
+import shutil
+import sys
 import time
 
 import eel
 
+HOME = os.path.normpath(  # The script directory + cxfreeze compatibility
+    os.path.dirname(
+        sys.executable if getattr(sys, 'frozen', False) else __file__))
+
 eel.init('web')
-
-
-@eel.expose
-def cleantime():
-    return round(time.time())
 
 
 @eel.expose
@@ -43,8 +44,19 @@ def get_files_dirs(path, allow=[]):
     return files, dirs
 
 
-# files, dirs = get_files_dirs(r'D:\Dropbox\Public\games\gif', ['.gif'])
-# for f in files:
-#     print(f)
+@eel.expose
+def copytree(source):
+    """
+        Copy all files from the path into application directory.
+    """
+
+    destiny = ''.join(i for i in source if i.isalnum()).lower()
+    destiny_path = os.path.join(HOME, 'images', destiny)
+    if os.path.exists(destiny_path):
+        shutil.rmtree(destiny_path)
+    shutil.copytree(source, destiny_path)
+
+
+# copytree(r'D:\Dropbox\Public\games\gif\haldronmoon')
 
 eel.start('app.html', size=(700, 500))

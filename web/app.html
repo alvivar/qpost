@@ -57,9 +57,9 @@
                 const posts = this.props.files.map((file) =>
                     <article className="media">
                         <figure className="media-left">
-                            <p className="image is-64x64">
+                            {/*<p className="image is-64x64">
                                 <img src="https://bulma.io/images/placeholders/128x128.png" />
-                            </p>
+                            </p>*/}
                         </figure>
                         <div className="media-content">
                             <div className="content">
@@ -69,7 +69,7 @@
                             </div>
                         </div>
                         <div className="media-right">
-                            <button className="delete"></button>
+                            {/*<button className="delete"></button>*/}
                         </div>
                     </article>
                 );
@@ -99,6 +99,7 @@
                 this.state = {
                     hasPath : false,
                     hasError : false,
+                    waiting : false,
                     path : '',
                     files : []
                 }
@@ -118,10 +119,17 @@
             async scanPathOnClick(e) {
                 let allow = ['.gif', '.jpg', '.png']  // Only images
                 let files = await eel.get_files_dirs(this.state.path, allow)();
+
                 files = files[0]  // First element from the tuple are the files
 
                 if (files.length > 0)
                 {
+                    this.setState({
+                        waiting : true
+                    });
+
+                    await eel.copytree(this.state.path)()
+
                     this.setState({
                         hasPath : true,
                         hasError : false,
