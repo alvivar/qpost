@@ -19,7 +19,10 @@
     <script type="text/babel">
 
         class PathInput extends React.Component {
-             render() {
+            render() {
+                const buttonClass = this.props.error ? 'button is-danger' : 'button is-primary';
+                const buttonText = this.props.error ? this.props.error : 'Scan';
+
                 return (
                     <section className="hero is-fullheight">
                         <div className="hero-body">
@@ -27,7 +30,7 @@
                                 <nav className="level">
                                     <div className="level-item">
                                         <input className="input" value={this.props.path} onChange={this.props.updatePath} type="text" placeholder="Paste your path here and click 'Scan'" />
-                                        <button className="button" onClick={this.props.scanPath}>Scan</button>
+                                        <button className={buttonClass} onClick={this.props.scanPath}>{buttonText}</button>
                                     </div>
                                 </nav>
                             </div>
@@ -52,28 +55,28 @@
         class PostsCollection extends React.Component {
             render() {
                 const posts = this.props.files.map((file) =>
-                    <article class="media">
-                        <figure class="media-left">
-                            <p class="image is-64x64">
+                    <article className="media">
+                        <figure className="media-left">
+                            <p className="image is-64x64">
                                 <img src="https://bulma.io/images/placeholders/128x128.png" />
                             </p>
                         </figure>
-                        <div class="media-content">
-                            <div class="content">
+                        <div className="media-content">
+                            <div className="content">
                                 <p>
                                     {file}
                                 </p>
                             </div>
                         </div>
-                        <div class="media-right">
-                            <button class="delete"></button>
+                        <div className="media-right">
+                            <button className="delete"></button>
                         </div>
                     </article>
                 );
 
                 return (
-                    <section class="section">
-                        <div class="container">
+                    <section className="section">
+                        <div className="container">
                             <nav className="level">
                                 <div className="level-item">
                                     <button className="button" onClick={this.props.clearPath}>Back</button>
@@ -95,6 +98,7 @@
 
                 this.state = {
                     hasPath : false,
+                    hasError : false,
                     path : '',
                     files : []
                 }
@@ -112,14 +116,23 @@
             }
 
             async scanPathOnClick(e) {
-                let allow = ['.gif', '.jpg', '.png']
+                let allow = ['.gif', '.jpg', '.png']  // Only images
                 let files = await eel.get_files_dirs(this.state.path, allow)();
                 files = files[0]  // First element from the tuple are the files
 
-                this.setState({
-                    hasPath : true,
-                    files : files
-                });
+                if (files.length > 0)
+                {
+                    this.setState({
+                        hasPath : true,
+                        hasError : false,
+                        files : files
+                    });
+                }
+                else {
+                    this.setState({
+                        hasError : "No files found!"
+                    });
+                }
             }
 
             clearPathOnClick(e) {
@@ -132,6 +145,7 @@
             renderPathInput() {
                 return (
                     <PathInput
+                        error={this.state.hasError}
                         path={this.state.path}
                         updatePath={this.updatePathOnChange}
                         scanPath={this.scanPathOnClick} />
