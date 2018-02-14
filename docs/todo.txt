@@ -3,8 +3,10 @@
 
 
     Copy files into a cache to display them as list
-    Display when files not found
+    Reorder posts, up, down button
+    Edit posts text
 
 
     2018/02/13 11:14 pm
-    Filter files with a list of words
+    x Display message when files not found
+    x Filter files with a list of words
