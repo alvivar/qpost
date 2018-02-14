@@ -132,6 +132,12 @@
                     this.setState({
                         hasError : "No files found!"
                     });
+
+                    setTimeout(function() {
+                        this.setState({
+                            hasError : false
+                        });
+                    }.bind(this), 2500);
                 }
             }
 
@@ -145,10 +151,10 @@
             renderPathInput() {
                 return (
                     <PathInput
-                        error={this.state.hasError}
                         path={this.state.path}
                         updatePath={this.updatePathOnChange}
-                        scanPath={this.scanPathOnClick} />
+                        scanPath={this.scanPathOnClick}
+                        error={this.state.hasError} />
                 );
             }
 
