@@ -112,7 +112,8 @@
             }
 
             async scanPathOnClick(e) {
-                let files = await eel.get_files_dirs(this.state.path)();
+                let allow = ['.gif', '.jpg', '.png']
+                let files = await eel.get_files_dirs(this.state.path, allow)();
                 files = files[0]  // First element from the tuple are the files
 
                 this.setState({
