@@ -2,11 +2,15 @@
         TO DO
 
 
-    Copy files into a cache to display them as list
+    Display cached files as list
+    Copy only images, not the entire thing
     Reorder posts, up, down button
     Edit posts text
 
+    Button feedback while copying the files
+
 
     2018/02/13 11:14 pm
+    x Copy files into a cache
     x Display message when files not found
     x Filter files with a list of words
