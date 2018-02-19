@@ -71,19 +71,32 @@ def allow_patterns(*patterns):
     return _ignore_patterns
 
 
-@eel.expose
-def copytree(source, filesfilter=['*']):
+def flatname(name):
     """
-        Copy all files from the path into application directory.
+        Return a lowercase alpha numeric only version of 'name'.
+
+        e.g. 'D:\Dropbox\Public\games\gif' -> 'ddropboxpublicgamesgif'
+    """
+    flat = ''.join(i for i in name if i.isalnum()).lower()
+    return flat
+
+
+@eel.expose
+def copytree(source, filesfilter=['*'], dirs=['web', 'images']):
+    """
+        Copy all files from the path into application directory. Return the
+        name of the local path with the files.
+
+        'filesfilter' is a file name pattern list of allowed files.
     """
 
-    destiny = ''.join(i for i in source if i.isalnum()).lower()
-    destiny_path = os.path.join(HOME, 'images', destiny)
+    destiny = flatname(source)
+    destiny_path = os.path.join(HOME, *dirs, destiny)
     if os.path.exists(destiny_path):
         shutil.rmtree(destiny_path)
     shutil.copytree(source, destiny_path, ignore=allow_patterns(*filesfilter))
 
+    return destiny_path
 
-# copytree(r'D:\Dropbox\Public\games\gif\haldronmoon')
 
 eel.start('app.html', size=(700, 500))

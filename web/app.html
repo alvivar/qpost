@@ -63,9 +63,7 @@
                         </figure>
                         <div className="media-content">
                             <div className="content">
-                                <p>
-                                    {file}
-                                </p>
+                                <img src={file} />
                             </div>
                         </div>
                         <div className="media-right">
@@ -119,8 +117,7 @@
             async scanPathOnClick(e) {
                 let allow = ['*.gif', '*.jpg', '*.png']  // Only images
                 let files = await eel.get_files_dirs(this.state.path, allow)();
-
-                files = files[0]  // First element from the tuple are the files
+                files = files[0];  // First element from the tuple are the files
 
                 if (files.length > 0)
                 {
@@ -128,12 +125,18 @@
                         waiting : true
                     });
 
-                    await eel.copytree(this.state.path, allow)()
+                    let localPath = await eel.copytree(this.state.path, allow)();
+                    let localFiles = await eel.get_files_dirs(localPath, allow)();
+
+                    localFiles = localFiles[0];
+                    localFiles = localFiles.map(function(x) {
+                        return x.replace('\web', '');
+                    });
 
                     this.setState({
                         hasPath : true,
                         hasError : false,
-                        files : files
+                        files : localFiles
                     });
                 }
                 else {
