@@ -117,7 +117,7 @@
             }
 
             async scanPathOnClick(e) {
-                let allow = ['.gif', '.jpg', '.png']  // Only images
+                let allow = ['*.gif', '*.jpg', '*.png']  // Only images
                 let files = await eel.get_files_dirs(this.state.path, allow)();
 
                 files = files[0]  // First element from the tuple are the files
@@ -128,7 +128,7 @@
                         waiting : true
                     });
 
-                    await eel.copytree(this.state.path)()
+                    await eel.copytree(this.state.path, allow)()
 
                     this.setState({
                         hasPath : true,
@@ -145,7 +145,7 @@
                         this.setState({
                             hasError : false
                         });
-                    }.bind(this), 2500);
+                    }.bind(this), 2000);
                 }
             }
 
