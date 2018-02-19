@@ -2,10 +2,8 @@
         TO DO
 
 
-    A main data structure is required #json
     Reorder posts, up, down button
     Delete posts
-    Save into the data structure
     Ignore default description value when saving
 
     Save should create a Qbot file in the selected path folder
@@ -17,6 +15,9 @@
 
 
     2018/02/18 06:01 pm
+    x Ctrl+Enter save description
+    x Edit data into the data structure
+    x A main data structure is required
     x Editable posts field
     x Display cached files as list
     x Copy only images, not the entire thing
