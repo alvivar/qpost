@@ -54,7 +54,7 @@
                 this.toggleEditMode = this.toggleEditMode.bind(this);
                 this.updateValueOnChange = this.updateValueOnChange.bind(this);
                 this.saveData = this.saveData.bind(this);
-                this.saveOnKeyPress = this.saveOnKeyPress.bind(this);
+                this.saveOnKeyDown = this.saveOnKeyDown.bind(this);
             }
 
 
@@ -81,7 +81,7 @@
                 this.toggleEditMode();
             }
 
-            saveOnKeyPress(e) {
+            saveOnKeyDown(e) {
                 // Ctrl + Enter
                 if((e.keyCode == 10 || e.keyCode == 13) && e.ctrlKey) {
                     this.saveData();
@@ -104,7 +104,7 @@
                     <div>
                         <textarea autoFocus
                             class="textarea" placeholder="Textarea" value={this.state.value}
-                            onChange={this.updateValueOnChange} onKeyDown={this.saveOnKeyPress}>
+                            onChange={this.updateValueOnChange} onKeyDown={this.saveOnKeyDown}>
                         </textarea>
                         <br />
                         <button className="button is-primary" onClick={this.saveData}>Save</button>
