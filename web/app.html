@@ -29,7 +29,7 @@
                             <div className="container">
                                 <nav className="level">
                                     <div className="level-item">
-                                        <input className="input" value={this.props.path} onChange={this.props.updatePath} type="text" placeholder="Paste your path here and click 'Scan'" />
+                                        <input autoFocus className="input" value={this.props.path} onChange={this.props.updatePath} type="text" placeholder="Paste your path here and click 'Scan'" />
                                         <button className={buttonClass} onClick={this.props.scanPath}>{buttonText}</button>
                                     </div>
                                 </nav>
@@ -71,16 +71,18 @@
 
             renderShow() {
                 return (
-                    <span onClick={this.toggleEditMode}>
-                        {this.state.value}
-                    </span>
+                    <div>
+                        <span onClick={this.toggleEditMode}>
+                            {this.state.value}
+                        </span>
+                    </div>
                 );
             }
 
             renderEdit() {
                 return (
                     <div>
-                        <textarea
+                        <textarea autoFocus
                             class="textarea" placeholder="Textarea"
                             value={this.state.value} onChange={this.updateValue}>
                         </textarea>
@@ -150,7 +152,8 @@
                     hasError : false,
                     waiting : false,
                     path : '',
-                    files : []
+                    files : [],
+                    data : {}
                 };
 
                 this.updatePathOnChange = this.updatePathOnChange.bind(this);
