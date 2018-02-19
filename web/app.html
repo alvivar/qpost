@@ -52,20 +52,40 @@
                 };
 
                 this.toggleEditMode = this.toggleEditMode.bind(this);
-                this.updateValue = this.updateValue.bind(this);
+                this.updateValueOnChange = this.updateValueOnChange.bind(this);
+                this.saveData = this.saveData.bind(this);
+                this.saveOnKeyPress = this.saveOnKeyPress.bind(this);
             }
 
 
-            toggleEditMode(value) {
+            toggleEditMode() {
                 this.setState({
                     editMode : !this.state.editMode
                 });
             }
 
-            updateValue(e) {
+            updateValueOnChange(e) {
                 this.setState({
                     value : e.target.value
                 });
+            }
+
+            saveData() {
+                let id = this.props.id;
+                let value = this.state.value;
+                let newData = this.props.data.map(
+                    i => i.file == id ? { file : i.file, description : value } : i
+                );
+
+                this.props.updateData(newData);
+                this.toggleEditMode();
+            }
+
+            saveOnKeyPress(e) {
+                // Ctrl + Enter
+                if((e.keyCode == 10 || e.keyCode == 13) && e.ctrlKey) {
+                    this.saveData();
+                }
             }
 
 
@@ -83,21 +103,21 @@
                 return (
                     <div>
                         <textarea autoFocus
-                            class="textarea" placeholder="Textarea"
-                            value={this.state.value} onChange={this.updateValue}>
+                            class="textarea" placeholder="Textarea" value={this.state.value}
+                            onChange={this.updateValueOnChange} onKeyDown={this.saveOnKeyPress}>
                         </textarea>
                         <br />
-                        <button className="button is-primary" onClick={this.toggleEditMode}>Save</button>
+                        <button className="button is-primary" onClick={this.saveData}>Save</button>
                     </div>
                 );
             }
 
             render() {
-                if (this.state.editMode) {
-                    return this.renderEdit();
+                if (!this.state.editMode) {
+                    return this.renderShow();
                 }
                 else {
-                    return this.renderShow();
+                    return this.renderEdit();
                 }
             }
         }
@@ -105,17 +125,17 @@
 
         class PostsCollection extends React.Component {
             render() {
-                const posts = this.props.files.map((file) =>
+                const posts = this.props.data.map((data) =>
                 <div className="">
                     <div className="card">
                         <div className="card-image">
                             <figure className="image is-4by3">
-                                <img src={file} alt="Placeholder image" />
+                                <img src={data.file} alt="Placeholder image" />
                             </figure>
                         </div>
                         <div className="card-content">
                             <div className="content">
-                                <Post />
+                                <Post id={data.file} data={this.props.data} updateData={this.props.updateData} />
                             </div>
                         </div>
                     </div>
@@ -150,15 +170,14 @@
                 this.state = {
                     hasPath : false,
                     hasError : false,
-                    waiting : false,
                     path : '',
-                    files : [],
-                    data : {}
+                    data : []
                 };
 
                 this.updatePathOnChange = this.updatePathOnChange.bind(this);
                 this.scanPathOnClick = this.scanPathOnClick.bind(this);
                 this.clearPathOnClick = this.clearPathOnClick.bind(this);
+                this.updateData = this.updateData.bind(this);
             }
 
 
@@ -169,26 +188,31 @@
             }
 
             async scanPathOnClick(e) {
+
+                // Scan the path for files
                 let allow = ['*.gif', '*.jpg', '*.png']  // Only images
                 let files = await eel.get_files_dirs(this.state.path, allow)();
-                files = files[0];  // First element from the tuple are the files
+                files = files[0];  // First element from the tuple result are the files, seconds dirs
 
                 if (files.length > 0)
                 {
-                    this.setState({
-                        waiting : true
-                    });
-
+                    // We need to copy the files in the app folder to render
+                    // them because of chrome safety rules :/
                     let localPath = await eel.copytree(this.state.path, allow)();
                     let localFiles = await eel.get_files_dirs(localPath, allow)();
-
                     localFiles = localFiles[0];
-                    localFiles = localFiles.map(x => x.replace('\web', ''));  // \web is assumed by Eel tech
+                    localFiles = localFiles.map(x => x.replace('\\web', ''));  // \web is assumed by Eel tech
+
+                    // Create a data node for each file
+                    let newData = localFiles.map(i => ({
+                        file : i,
+                        description : ""
+                    }));
 
                     this.setState({
                         hasPath : true,
                         hasError : false,
-                        files : localFiles
+                        data : newData
                     });
                 }
                 else {
@@ -210,6 +234,12 @@
                 });
             }
 
+            updateData(newData) {
+                this.setState({
+                    data : newData
+                });
+            }
+
 
             renderPathInput() {
                 return (
@@ -224,7 +254,8 @@
             renderPosts() {
                 return (
                     <PostsCollection
-                        files={this.state.files}
+                        data={this.state.data}
+                        updateData={this.updateData}
                         clearPath={this.clearPathOnClick} />
                 );
             }
