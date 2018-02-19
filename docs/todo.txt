@@ -6,6 +6,8 @@
     Delete posts
     Ignore default description value when saving
 
+    Enter key to scan
+
     Save should create a Qbot file in the selected path folder
     Save into a file
     Load from file
