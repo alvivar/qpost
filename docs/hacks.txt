@@ -4,3 +4,9 @@
 
 Render after a promise in React
 https://medium.com/front-end-hacking/async-await-with-react-lifecycle-methods-802e7760d802
+
+Arrow function that returns an object
+https://stackoverflow.com/questions/28770415/ecmascript6-arrow-function-that-returns-an-object
+
+copytree ignoring files
+https://stackoverflow.com/questions/42487578/python-shutil-copytree-use-ignore-function-to-keep-specific-files-types
