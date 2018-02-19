@@ -48,7 +48,7 @@
 
                 this.state = {
                     editMode : false,
-                    value : "Is this even real?"
+                    value : "Click here to edit"
                 };
 
                 this.toggleEditMode = this.toggleEditMode.bind(this);
@@ -84,7 +84,8 @@
                             class="textarea" placeholder="Textarea"
                             value={this.state.value} onChange={this.updateValue}>
                         </textarea>
-                        <button onClick={this.toggleEditMode}>Save</button>
+                        <br />
+                        <button className="button is-primary" onClick={this.toggleEditMode}>Save</button>
                     </div>
                 );
             }
@@ -126,7 +127,7 @@
                             <nav className="level">
                                 <div className="level-item">
                                     <button className="button" onClick={this.props.clearPath}>Back</button>
-                                    <button className="button is-primary" onClick={this.props.clearPath}>Create</button>
+                                    <button className="button is-primary" onClick={this.props.clearPath}>Save</button>
                                 </div>
                             </nav>
                             <div className="">

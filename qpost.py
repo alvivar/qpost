@@ -99,4 +99,4 @@ def copytree(source, filesfilter=['*'], dirs=['web', 'images']):
     return destiny_path
 
 
-eel.start('app.html', size=(750, 550))
+eel.start('app.html', size=(500, 700))
