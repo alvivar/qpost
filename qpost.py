@@ -7,6 +7,7 @@
 
 import fnmatch
 import hashlib
+import json
 import os
 import shutil
 import sys
@@ -19,6 +20,17 @@ HOME = os.path.normpath(  # The script directory + cxfreeze compatibility
         sys.executable if getattr(sys, 'frozen', False) else __file__))
 
 eel.init('eeldata')
+
+
+@eel.expose
+def flatname(name):
+    """
+        Return a lowercase alpha numeric only version of 'name'.
+
+        e.g. 'D:\Dropbox\Public\games\gif' -> 'ddropboxpublicgamesgif'
+    """
+    flat = ''.join(i for i in name if i.isalnum()).lower()
+    return flat
 
 
 @eel.expose
@@ -73,17 +85,6 @@ def allow_patterns(*patterns):
 
 
 @eel.expose
-def flatname(name):
-    """
-        Return a lowercase alpha numeric only version of 'name'.
-
-        e.g. 'D:\Dropbox\Public\games\gif' -> 'ddropboxpublicgamesgif'
-    """
-    flat = ''.join(i for i in name if i.isalnum()).lower()
-    return flat
-
-
-@eel.expose
 def copytree(source, filesfilter=['*'], dirs=['eeldata', 'cache']):
     """
         Copy all files from the path into application directory. Return the
@@ -102,4 +103,9 @@ def copytree(source, filesfilter=['*'], dirs=['eeldata', 'cache']):
     return destiny_path
 
 
-eel.start('app.html', size=(450, 750))
+@eel.expose
+def savefile(name, data, dirs=['eeldata', 'cache']):
+    file_path = os.path.join(HOME, *dirs, name)
+
+
+eel.start('app.html', size=(400, 800))
