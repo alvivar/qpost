@@ -104,8 +104,21 @@ def copytree(source, filesfilter=['*'], dirs=['eeldata', 'cache']):
 
 
 @eel.expose
-def savefile(name, data, dirs=['eeldata', 'cache']):
-    file_path = os.path.join(HOME, *dirs, name)
+def savefile(path, data, dirs=['eeldata', 'files']):
+    """
+        Create a json file with a unique name based on the 'path' that will
+        contain the 'data'.
+    """
+
+    filepath = os.path.join(HOME, *dirs)
+    if not os.path.exists(filepath):
+        os.makedirs(filepath)
+
+    name = hashlib.md5(flatname(path).encode('utf-8')).hexdigest()
+    filename = os.path.join(filepath, name + '.json')
+
+    with open(filename, 'w') as f:
+        json.dump(data, f)
 
 
 eel.start('app.html', size=(400, 800))

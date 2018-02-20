@@ -118,7 +118,7 @@
                 return (
                     <div>
                         <span onClick={this.toggleEditMode}>
-                            {this.state.value ? this.state.value : <p className="help">(Click to edit)</p>}
+                            {this.state.value.trim() ? this.state.value : <p className="help">(Click to edit)</p>}
                         </span>
                     </div>
                 );
@@ -284,13 +284,17 @@
                         description : ""
                     }));
 
-                    await Promise.all(newData).then(promisedData =>
+                    await Promise.all(newData).then(promisedData => {
+                        newData = promisedData;
+
                         this.setState({
                             hasPath : true,
                             hasError : false,
-                            data : promisedData
+                            data : newData
                         })
-                    );
+                    });
+
+                    await eel.savefile(this.state.path, newData)();
                 }
                 else {
                     this.setState({
@@ -311,10 +315,13 @@
                 });
             }
 
-            updateData(newData) {
+            async updateData(newData) {
                 this.setState({
                     data : newData
                 });
+
+                await eel.savefile(this.state.path, newData)();
+                console.log(newData);
             }
 
 
