@@ -19,6 +19,22 @@
     <script type="text/babel">
 
         class PathInput extends React.Component {
+
+            constructor(props) {
+                super(props);
+
+                this.scanOnKeyDown = this.scanOnKeyDown.bind(this);
+            }
+
+
+            scanOnKeyDown(e) {
+                // Enter
+                if((e.keyCode == 10 || e.keyCode == 13)) {
+                    this.props.scanPath(e);
+                }
+            }
+
+
             render() {
                 const buttonClass = this.props.error ? 'button is-danger' : 'button is-primary';
                 const buttonText = this.props.error ? this.props.error : 'Scan';
@@ -29,7 +45,9 @@
                             <div className="container">
                                 <nav className="level">
                                     <div className="level-item">
-                                        <input autoFocus className="input" value={this.props.path} onChange={this.props.updatePath} type="text" placeholder="Paste your path here and click 'Scan'" />
+                                        <input
+                                            autoFocus className="input" type="text" placeholder="Paste your path here and click 'Scan'"
+                                            value={this.props.path} onChange={this.props.updatePath} onKeyDown={this.scanOnKeyDown} />
                                         <button className={buttonClass} onClick={this.props.scanPath}>{buttonText}</button>
                                     </div>
                                 </nav>
@@ -129,7 +147,7 @@
                 <div className="">
                     <div className="card">
                         <div className="card-image">
-                            <figure className="image is-4by3">
+                            <figure className="image">
                                 <img src={data.file} alt="Placeholder image" />
                             </figure>
                         </div>
