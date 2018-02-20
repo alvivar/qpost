@@ -16,3 +16,9 @@ https://stackoverflow.com/questions/45160579/passing-id-with-onclick-function-re
 
 Map over async functions
 https://medium.com/@ian.mundy/async-map-in-javascript-b19439f0099
+
+Finding the index of a complex object in an array
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findIndex
+
+Remove element from javascript array
+https://stackoverflow.com/questions/5767325/how-do-i-remove-a-particular-element-from-an-array-in-javascript
