@@ -22,3 +22,6 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects
 
 Remove element from javascript array
 https://stackoverflow.com/questions/5767325/how-do-i-remove-a-particular-element-from-an-array-in-javascript
+
+Updating state from props on React
+https://stackoverflow.com/questions/32414308/updating-state-on-props-change-in-react-form
