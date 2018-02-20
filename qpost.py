@@ -18,7 +18,7 @@ HOME = os.path.normpath(  # The script directory + cxfreeze compatibility
     os.path.dirname(
         sys.executable if getattr(sys, 'frozen', False) else __file__))
 
-eel.init('web')
+eel.init('eeldata')
 
 
 @eel.expose
@@ -83,7 +83,7 @@ def flatname(name):
 
 
 @eel.expose
-def copytree(source, filesfilter=['*'], dirs=['web', 'images']):
+def copytree(source, filesfilter=['*'], dirs=['eeldata', 'cache']):
     """
         Copy all files from the path into application directory. Return the
         name of the local path with the files.
