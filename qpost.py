@@ -72,6 +72,7 @@ def allow_patterns(*patterns):
     return _ignore_patterns
 
 
+@eel.expose
 def flatname(name):
     """
         Return a lowercase alpha numeric only version of 'name'.
@@ -101,4 +102,4 @@ def copytree(source, filesfilter=['*'], dirs=['eeldata', 'cache']):
     return destiny_path
 
 
-eel.start('app.html', size=(500, 700))
+eel.start('app.html', size=(450, 750))
