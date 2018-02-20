@@ -1,5 +1,6 @@
 build
 dist
 eeldata/cache/
+eeldata/files/
 *.pyc
 *.spec
