@@ -99,7 +99,12 @@
                 let id = this.props.id;
                 let value = this.state.value;
                 let newData = this.props.data.map(
-                    i => i.id == id ? { id : i.id, file : i.file, description : value } : i
+                    i => i.id == id ? {
+                        id : i.id,
+                        file : i.file,
+                        appFile : i.appFile,
+                        description : value
+                    } : i
                 );
 
                 this.props.updateData(newData);
@@ -159,6 +164,7 @@
 
 
             moveUp(id, e) {
+
                 // Find
                 let idIndex = this.props.data.findIndex(
                     i => i.id == id
@@ -176,6 +182,7 @@
             }
 
             moveDown(id, e) {
+
                 // Find
                 let idIndex = this.props.data.findIndex(
                     i => i.id == id
@@ -199,7 +206,7 @@
                         <div className="card">
                             <div className="card-image">
                                 <figure className="image">
-                                    <img src={data.file} />
+                                    <img src={data.appFile} />
                                 </figure>
                             </div>
                             <div className="card-content">
@@ -261,50 +268,61 @@
                 });
             }
 
-            async scanPathOnClick(e) {
 
-                // Scan the path for files
+            async getFilesData(path) {
+
+                // Read the saved file for previously scanned paths
+                let savedFileData = await eel.loadfile(path)();
+                if (savedFileData.length > 0) {
+                    return savedFileData;
+                }
+
+
+                // Or scan the path for new data
                 let allow = ['*.gif', '*.jpg', '*.png']  // Only images
-                let files = await eel.get_files_dirs(this.state.path, allow)();
+                let files = await eel.get_files_dirs(path, allow)();
                 files = files[0];  // First element from the tuple result are the files, seconds dirs
 
                 if (files.length > 0)
                 {
                     // We need to copy the files in the app folder to render
                     // them because of chrome safety rules :/
-                    let localPath = await eel.copytree(this.state.path, allow)();
+                    let localPath = await eel.copytree(path, allow)();
                     let localFiles = await eel.get_files_dirs(localPath, allow)();
                     localFiles = localFiles[0];
-                    localFiles = localFiles.map(x => x.split('\\eeldata').pop());  //  ... \cache |cut| = app base
 
                     // Create a data node for each file
-                    let newData = localFiles.map(async (i) => ({
+                    let newData = localFiles.map(async (i, index) => ({
                         id : await eel.flatname(i)(),
-                        file : i,
+                        file : files[index],
+                        appFile : i.split('\\eeldata').pop(), // Relative to Eel app
                         description : ""
                     }));
 
-                    await Promise.all(newData).then(promisedData => {
-                        newData = promisedData;
+                    await Promise.all(newData).then(promisedData => newData = promisedData);
+                    return newData;
+                }
+            }
 
-                        this.setState({
-                            hasPath : true,
-                            hasError : false,
-                            data : newData
-                        })
+            async scanPathOnClick(e) {
+
+                let filesData = await this.getFilesData(this.state.path);
+                if (filesData.length > 0) {
+
+                    this.setState({
+                        hasPath : true,
+                        hasError : false,
+                        data : filesData
                     });
 
                     await eel.savefile(this.state.path, newData)();
                 }
                 else {
-                    this.setState({
-                        hasError : "No files found!"
-                    });
+
+                    this.setState({ hasError : "No files found!" });
 
                     setTimeout(function() {
-                        this.setState({
-                            hasError : false
-                        });
+                        this.setState({ hasError : false });
                     }.bind(this), 2000);
                 }
             }

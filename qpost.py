@@ -121,4 +121,20 @@ def savefile(path, data, dirs=['eeldata', 'files']):
         json.dump(data, f)
 
 
+@eel.expose
+def loadfile(path, dirs=['eeldata', 'files']):
+
+    filepath = os.path.join(HOME, *dirs)
+    name = hashlib.md5(flatname(path).encode('utf-8')).hexdigest()
+    filename = os.path.join(filepath, name + '.json')
+
+    try:
+        with open(filename, 'r') as f:
+            data = json.load(f)
+    except (IOError, ValueError):
+        data = []
+
+    return data
+
+
 eel.start('app.html', size=(400, 800))
