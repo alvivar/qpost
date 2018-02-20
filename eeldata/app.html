@@ -48,7 +48,7 @@
                                         <input
                                             autoFocus className="input" type="text" placeholder="Paste your path here and click 'Scan'"
                                             value={this.props.path} onChange={this.props.updatePath} onKeyDown={this.scanOnKeyDown} />
-                                        <button className={buttonClass} onClick={this.props.scanPath}>{buttonText}</button>
+                                        <a className={buttonClass} onClick={this.props.scanPath}>{buttonText}</a>
                                     </div>
                                 </nav>
                             </div>
@@ -121,11 +121,11 @@
                 return (
                     <div>
                         <textarea autoFocus
-                            class="textarea" placeholder="Textarea" value={this.state.value}
+                            className="textarea" value={this.state.value}
                             onChange={this.updateValueOnChange} onKeyDown={this.saveOnKeyDown}>
                         </textarea>
                         <br />
-                        <button className="button is-primary" onClick={this.saveData}>Save</button>
+                        <a className="button is-primary" onClick={this.saveData}>Save</a>
                     </div>
                 );
             }
@@ -142,34 +142,83 @@
 
 
         class PostsCollection extends React.Component {
+
+            constructor(props) {
+                super(props);
+
+                this.moveUp = this.moveUp.bind(this);
+                this.moveDown = this.moveDown.bind(this);
+            }
+
+
+            moveUp(id, e) {
+                // Find
+                let idIndex = this.props.data.findIndex(
+                    i => i.id == id
+                );
+
+                // Move
+                let newData = this.props.data;
+                let value = newData[idIndex];
+
+                newData.splice(idIndex, 1);  // Remove
+                idIndex = idIndex > 0 ? idIndex - 1 : 0;  // Up
+                newData.splice(idIndex, 0, value);  // Insert
+
+                this.props.updateData(newData);
+            }
+
+            moveDown(id, e) {
+                // Find
+                let idIndex = this.props.data.findIndex(
+                    i => i.id == id
+                );
+
+                // Move
+                let newData = this.props.data;
+                let value = newData[idIndex];
+
+                newData.splice(idIndex, 1);  // Remove
+                idIndex = idIndex + 1;  // Down
+                newData.splice(idIndex, 0, value);  // Insert
+
+                this.props.updateData(newData);
+            }
+
+
             render() {
                 const posts = this.props.data.map((data) =>
-                <div className="">
-                    <div className="card">
-                        <div className="card-image">
-                            <figure className="image">
-                                <img src={data.file} alt="Placeholder image" />
-                            </figure>
-                        </div>
-                        <div className="card-content">
-                            <div className="content">
-                                <Post id={data.file} data={this.props.data} updateData={this.props.updateData} />
+                    <div className="">
+                        <div className="card">
+                            <div className="card-image">
+                                <figure className="image">
+                                    <img src={data.file} />
+                                </figure>
                             </div>
+                            <div className="card-content">
+                                <div className="content">
+                                    <Post id={data.id} data={this.props.data} updateData={this.props.updateData} />
+                                </div>
+                            </div>
+                            <footer className="card-footer">
+                                <a onClick={e => this.moveUp(data.id, e)} className="button card-footer-item">Up</a>
+                                <a onClick={e => this.moveDown(data.id, e)} className="button card-footer-item">Down</a>
+                            </footer>
                         </div>
+                        <hr />
                     </div>
-                    <hr />
-                </div>
                 );
 
                 return (
                     <section className="section">
                         <div className="container">
-                            <nav className="level">
+                            <nav className="level navbar is-fixed-top">
                                 <div className="level-item">
-                                    <button className="button" onClick={this.props.clearPath}>Back</button>
-                                    <button className="button is-primary" onClick={this.props.clearPath}>Save</button>
+                                    <a className="button" onClick={this.props.clearPath}>Back</a>
+                                    <a className="button is-primary" onClick={this.props.clearPath}>Save</a>
                                 </div>
                             </nav>
+                            <br />
                             <div className="">
                                 {posts}
                             </div>
@@ -222,16 +271,19 @@
                     localFiles = localFiles.map(x => x.split('\\eeldata').pop());  //  ... \cache |cut| = app base
 
                     // Create a data node for each file
-                    let newData = localFiles.map(i => ({
+                    let newData = localFiles.map(async (i) => ({
+                        id : await eel.flatname(i)(),
                         file : i,
                         description : ""
                     }));
 
-                    this.setState({
-                        hasPath : true,
-                        hasError : false,
-                        data : newData
-                    });
+                    await Promise.all(newData).then(promisedData =>
+                        this.setState({
+                            hasPath : true,
+                            hasError : false,
+                            data : promisedData
+                        })
+                    );
                 }
                 else {
                     this.setState({
