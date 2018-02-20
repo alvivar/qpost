@@ -6,6 +6,7 @@
 """
 
 import fnmatch
+import hashlib
 import os
 import shutil
 import sys
@@ -90,8 +91,9 @@ def copytree(source, filesfilter=['*'], dirs=['web', 'images']):
         'filesfilter' is a file name pattern list of allowed files.
     """
 
-    destiny = flatname(source)
+    destiny = hashlib.md5(flatname(source).encode('utf-8')).hexdigest()
     destiny_path = os.path.join(HOME, *dirs, destiny)
+
     if os.path.exists(destiny_path):
         shutil.rmtree(destiny_path)
     shutil.copytree(source, destiny_path, ignore=allow_patterns(*filesfilter))
