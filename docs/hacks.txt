@@ -10,3 +10,9 @@ https://stackoverflow.com/questions/28770415/ecmascript6-arrow-function-that-ret
 
 copytree ignoring files
 https://stackoverflow.com/questions/42487578/python-shutil-copytree-use-ignore-function-to-keep-specific-files-types
+
+onClick function that has the html element id as argument
+https://stackoverflow.com/questions/45160579/passing-id-with-onclick-function-react
+
+Map over async functions
+https://medium.com/@ian.mundy/async-map-in-javascript-b19439f0099
