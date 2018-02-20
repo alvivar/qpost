@@ -219,7 +219,7 @@
                     let localPath = await eel.copytree(this.state.path, allow)();
                     let localFiles = await eel.get_files_dirs(localPath, allow)();
                     localFiles = localFiles[0];
-                    localFiles = localFiles.map(x => x.split('\\web').pop());  //  ... \web |cut| = app base
+                    localFiles = localFiles.map(x => x.split('\\eeldata').pop());  //  ... \cache |cut| = app base
 
                     // Create a data node for each file
                     let newData = localFiles.map(i => ({
