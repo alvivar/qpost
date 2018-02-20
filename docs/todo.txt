@@ -2,19 +2,19 @@
         TO DO
 
 
-    Reorder posts, up, down button
-    Delete posts
-    Ignore default description value when saving
+    Delete / ignore posts
 
     Save should create a Qbot file in the selected path folder
-    Save into a file
-    Load from file
+    Load the file data when opening the same path
+    Ignore default description value when saving
 
     Button feedback while copying the files
     Drag and drop to detect path
 
 
     2018/02/19 06:41 pm
+    x Reorder posts, up, down button
+    x Navbar on top
     x Better folder names
     x Folder names are md5 of the original path flat name
     x Enter key to scan
