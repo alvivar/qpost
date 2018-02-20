@@ -6,8 +6,6 @@
     Delete posts
     Ignore default description value when saving
 
-    Enter key to scan
-
     Save should create a Qbot file in the selected path folder
     Save into a file
     Load from file
@@ -15,6 +13,11 @@
     Button feedback while copying the files
     Drag and drop to detect path
 
+
+    2018/02/19 06:41 pm
+    x Better folder names
+    x Folder names are md5 of the original path flat name
+    x Enter key to scan
 
     2018/02/18 06:01 pm
     x Ctrl+Enter save description
