@@ -1,1 +1,5 @@
+build
+dist
 web/images
+*.pyc
+*.spec
