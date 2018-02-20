@@ -1,5 +1,5 @@
 build
 dist
-web/images
+eeldata/cache/
 *.pyc
 *.spec
