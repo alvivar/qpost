@@ -66,13 +66,20 @@
 
                 this.state = {
                     editMode : false,
-                    value : "Click here to edit"
+                    value : ""
                 };
 
                 this.toggleEditMode = this.toggleEditMode.bind(this);
                 this.updateValueOnChange = this.updateValueOnChange.bind(this);
                 this.saveData = this.saveData.bind(this);
                 this.saveOnKeyDown = this.saveOnKeyDown.bind(this);
+            }
+
+
+            componentWillReceiveProps(nextProps) {
+                if (this.state.value !== nextProps.value) {
+                    this.setState({value : nextProps.value});
+                }
             }
 
 
@@ -92,7 +99,7 @@
                 let id = this.props.id;
                 let value = this.state.value;
                 let newData = this.props.data.map(
-                    i => i.file == id ? { file : i.file, description : value } : i
+                    i => i.id == id ? { id : i.id, file : i.file, description : value } : i
                 );
 
                 this.props.updateData(newData);
@@ -111,7 +118,7 @@
                 return (
                     <div>
                         <span onClick={this.toggleEditMode}>
-                            {this.state.value}
+                            {this.state.value ? this.state.value : <p className="help">(Click to edit)</p>}
                         </span>
                     </div>
                 );
@@ -197,7 +204,7 @@
                             </div>
                             <div className="card-content">
                                 <div className="content">
-                                    <Post id={data.id} data={this.props.data} updateData={this.props.updateData} />
+                                    <Post id={data.id} value={data.description} data={this.props.data} updateData={this.props.updateData} />
                                 </div>
                             </div>
                             <footer className="card-footer">
