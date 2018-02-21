@@ -2,17 +2,23 @@
         TO DO
 
 
-    Delete / ignore posts
+    Saved feedback when the file is saved
+    There must be a recent file directory
 
-    Save should create a Qbot file in the selected path folder
-    Load the file data when opening the same path
-    Ignore default description value when saving
-
-    Button feedback while copying the files
     Drag and drop to detect path
 
+    2018/02/20 07:08 pm
+    x Ignored posts can be enabled again with the same button
+    x Show ignored posts
+    x Save feedback while copying the files
+    x Delete / ignore posts
+    x Save should create a Qbot file in the original path folder
+    x bug When the path is wrong, promises exception isn't detected correctly
+    x bug Description need to be updated on file load
+    x Load the file data when opening the same path
 
     2018/02/19 06:41 pm
+    x Ignore default description value when saving
     x Reorder posts, up, down button
     x Navbar on top
     x Better folder names
