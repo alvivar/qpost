@@ -210,10 +210,18 @@
             }
 
             toggleIgnore(id, e) {
+
+                // Toggle ignore
                 let newData = this.props.data.map(i => {
                     if (i.id == id) i.ignore = !i.ignore;
                     return i;
                 });
+
+                // Remove it and add it to the end
+                let idIndex = this.props.data.findIndex(i => i.id == id);
+                let value = newData[idIndex];
+                newData.splice(idIndex, 1);
+                newData.push(value);
 
                 this.props.updateData(newData);
             }
@@ -241,9 +249,8 @@
                 let buttonIgnoreText = 'Ignore';
 
                 if (this.state.showIgnored) {
-                    buttonIgnoreText = 'Add';
+                    buttonIgnoreText = 'Add again';
                 }
-
 
                 let posts = chosenData.map(data =>
                     <div className="">
@@ -259,8 +266,8 @@
                                 </div>
                             </div>
                             <footer className="card-footer">
-                                <a onClick={e => this.moveUp(data.id, e)} className="button card-footer-item">Up</a>
-                                <a onClick={e => this.moveDown(data.id, e)} className="button card-footer-item">Down</a>
+                                { !this.state.showIgnored ? <a onClick={e => this.moveUp(data.id, e)} className="button card-footer-item">Up</a> : null }
+                                { !this.state.showIgnored ? <a onClick={e => this.moveDown(data.id, e)} className="button card-footer-item">Down</a> : null }
                                 <a onClick={e => this.toggleIgnore(data.id, e)} className="button card-footer-item">{buttonIgnoreText}</a>
                             </footer>
                         </div>
