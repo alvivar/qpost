@@ -23,13 +23,16 @@ eel.init('eeldata')
 
 
 @eel.expose
-def flatname(name):
+def flatname(name, md5it=False):
     """
-        Return a lowercase alpha numeric only version of 'name'.
+        Return a lowercase alpha numeric only version of 'name'. 'md5it' will
+        return the md5 hash of flat version of 'name'.
 
         e.g. 'D:\Dropbox\Public\games\gif' -> 'ddropboxpublicgamesgif'
     """
+
     flat = ''.join(i for i in name if i.isalnum()).lower()
+    flat = hashlib.md5(name.encode('utf-8')).hexdigest() if md5it else flat
     return flat
 
 
@@ -104,7 +107,7 @@ def copytree(source, filesfilter=['*'], dirs=['eeldata', 'cache']):
 
 
 @eel.expose
-def savefile(path, data, dirs=['eeldata', 'files']):
+def savepathfile(path, data, dirs=['eeldata', 'files']):
     """
         Create a json file with a unique name based on the 'path' that will
         contain the 'data'.
@@ -122,7 +125,7 @@ def savefile(path, data, dirs=['eeldata', 'files']):
 
 
 @eel.expose
-def loadfile(path, dirs=['eeldata', 'files']):
+def loadpathfile(path, dirs=['eeldata', 'files']):
 
     filepath = os.path.join(HOME, *dirs)
     name = hashlib.md5(flatname(path).encode('utf-8')).hexdigest()
@@ -137,4 +140,22 @@ def loadfile(path, dirs=['eeldata', 'files']):
     return data
 
 
-eel.start('app.html', size=(400, 800))
+@eel.expose
+def saveqbotfile(path):
+
+    pathdata = loadpathfile(path)
+
+    qbot = {'messages': []}
+    for data in pathdata:
+        if not data['ignore']:
+            qbot['messages'].append({
+                'text': data['content'],
+                'image': data['file']
+            })
+
+    qbotpath = os.path.join(path, 'qbot.json')
+    with open(qbotpath, 'w') as f:
+        json.dump(qbot, f)
+
+
+eel.start('app.html', size=(450, 700))
