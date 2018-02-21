@@ -22,7 +22,6 @@
 
             constructor(props) {
                 super(props);
-
                 this.scanOnKeyDown = this.scanOnKeyDown.bind(this);
             }
 
@@ -36,8 +35,16 @@
 
 
             render() {
-                const buttonClass = this.props.error ? 'button is-danger' : 'button is-primary';
-                const buttonText = this.props.error ? this.props.error : 'Scan';
+                let buttonClass = 'button is-primary';
+                let buttonText = 'Scan';
+
+                if (this.props.error) {
+                    buttonClass = 'button is-danger';
+                    buttonText = this.props.error;
+                }
+                else if (this.props.waiting) {
+                    buttonClass = 'button is-info is-loading';
+                }
 
                 return (
                     <section className="hero is-fullheight">
@@ -66,7 +73,7 @@
 
                 this.state = {
                     editMode : false,
-                    value : ""
+                    value : props.value
                 };
 
                 this.toggleEditMode = this.toggleEditMode.bind(this);
@@ -96,16 +103,13 @@
             }
 
             saveData() {
+
                 let id = this.props.id;
                 let value = this.state.value;
-                let newData = this.props.data.map(
-                    i => i.id == id ? {
-                        id : i.id,
-                        file : i.file,
-                        appFile : i.appFile,
-                        description : value
-                    } : i
-                );
+                let newData = this.props.data.map(i => {
+                    if (i.id == id) i.content = value;
+                    return i;
+                });
 
                 this.props.updateData(newData);
                 this.toggleEditMode();
@@ -158,8 +162,14 @@
             constructor(props) {
                 super(props);
 
+                this.state = {
+                    showIgnored : false
+                };
+
                 this.moveUp = this.moveUp.bind(this);
                 this.moveDown = this.moveDown.bind(this);
+                this.toggleIgnore = this.toggleIgnore.bind(this);
+                this.toggleShowIgnore = this.toggleShowIgnore.bind(this);
             }
 
 
@@ -199,9 +209,43 @@
                 this.props.updateData(newData);
             }
 
+            toggleIgnore(id, e) {
+                let newData = this.props.data.map(i => {
+                    if (i.id == id) i.ignore = !i.ignore;
+                    return i;
+                });
+
+                this.props.updateData(newData);
+            }
+
+            toggleShowIgnore() {
+                this.setState({
+                    showIgnored : !this.state.showIgnored
+                });
+            }
+
 
             render() {
-                const posts = this.props.data.map((data) =>
+
+                let chosenData = this.props.data;
+
+                if (this.state.showIgnored) {
+                    chosenData = chosenData.filter(i => i.ignore);
+                }
+                else {
+                    chosenData = chosenData.filter(i => !i.ignore);
+                }
+
+
+                let buttonIgnoreClass = '';
+                let buttonIgnoreText = 'Ignore';
+
+                if (this.state.showIgnored) {
+                    buttonIgnoreText = 'Add';
+                }
+
+
+                let posts = chosenData.map(data =>
                     <div className="">
                         <div className="card">
                             <div className="card-image">
@@ -211,27 +255,40 @@
                             </div>
                             <div className="card-content">
                                 <div className="content">
-                                    <Post id={data.id} value={data.description} data={this.props.data} updateData={this.props.updateData} />
+                                    <Post id={data.id} value={data.content} data={this.props.data} updateData={this.props.updateData} />
                                 </div>
                             </div>
                             <footer className="card-footer">
                                 <a onClick={e => this.moveUp(data.id, e)} className="button card-footer-item">Up</a>
                                 <a onClick={e => this.moveDown(data.id, e)} className="button card-footer-item">Down</a>
+                                <a onClick={e => this.toggleIgnore(data.id, e)} className="button card-footer-item">{buttonIgnoreText}</a>
                             </footer>
                         </div>
                         <hr />
                     </div>
                 );
 
+
+                let buttonShowClass = 'button';
+                let buttonShowText = 'Show ignored';
+
+                if (this.state.showIgnored) {
+                    buttonShowClass = 'button is-warning';
+                    buttonShowText = 'Hide ignored'
+                }
+
+
                 return (
                     <section className="section">
+                        <nav className="level navbar is-fixed-top">
+                            <div className="level-item">
+                                <a className="button" onClick={this.props.clearPath}>Back</a>
+                                <a className={buttonShowClass} onClick={this.toggleShowIgnore}>
+                                    {buttonShowText}
+                                </a>
+                            </div>
+                        </nav>
                         <div className="container">
-                            <nav className="level navbar is-fixed-top">
-                                <div className="level-item">
-                                    <a className="button" onClick={this.props.clearPath}>Back</a>
-                                    <a className="button is-primary" onClick={this.props.clearPath}>Save</a>
-                                </div>
-                            </nav>
                             <br />
                             <div className="">
                                 {posts}
@@ -251,6 +308,7 @@
                 this.state = {
                     hasPath : false,
                     hasError : false,
+                    isWaiting : false,
                     path : '',
                     data : []
                 };
@@ -272,9 +330,9 @@
             async getFilesData(path) {
 
                 // Read the saved file for previously scanned paths
-                let savedFileData = await eel.loadfile(path)();
-                if (savedFileData.length > 0) {
-                    return savedFileData;
+                let savedPathData = await eel.loadpathfile(path)();
+                if (savedPathData.length > 0) {
+                    return savedPathData;
                 }
 
 
@@ -293,10 +351,12 @@
 
                     // Create a data node for each file
                     let newData = localFiles.map(async (i, index) => ({
-                        id : await eel.flatname(i)(),
+                        id : await eel.flatname(i, true)(),
                         file : files[index],
                         appFile : i.split('\\eeldata').pop(), // Relative to Eel app
-                        description : ""
+                        content : "",
+                        ignore : false,
+                        published : false
                     }));
 
                     await Promise.all(newData).then(promisedData => newData = promisedData);
@@ -306,20 +366,26 @@
 
             async scanPathOnClick(e) {
 
+                this.setState({ isWaiting : true });
+
                 let filesData = await this.getFilesData(this.state.path);
-                if (filesData.length > 0) {
+                if (filesData && filesData.length > 0) {
 
                     this.setState({
                         hasPath : true,
                         hasError : false,
+                        isWaiting : false,
                         data : filesData
                     });
 
-                    await eel.savefile(this.state.path, newData)();
+                    await eel.savepathfile(this.state.path, filesData)();
                 }
                 else {
 
-                    this.setState({ hasError : "No files found!" });
+                    this.setState({
+                        hasError : "No files found!",
+                        isWaiting : false
+                    });
 
                     setTimeout(function() {
                         this.setState({ hasError : false });
@@ -338,7 +404,8 @@
                     data : newData
                 });
 
-                await eel.savefile(this.state.path, newData)();
+                await eel.savepathfile(this.state.path, newData)();
+                await eel.saveqbotfile(this.state.path)();
                 console.log(newData);
             }
 
@@ -349,7 +416,8 @@
                         path={this.state.path}
                         updatePath={this.updatePathOnChange}
                         scanPath={this.scanPathOnClick}
-                        error={this.state.hasError} />
+                        error={this.state.hasError}
+                        waiting={this.state.isWaiting} />
                 );
             }
 
