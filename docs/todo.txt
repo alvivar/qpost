@@ -4,8 +4,11 @@
 
     Saved feedback when the file is saved
     There must be a recent file directory
+    Show more info, the path, hide images
+    Sort by rank by clicking
 
     Drag and drop to detect path
+
 
     2018/02/20 07:08 pm
     x Ignored posts can be enabled again with the same button
