@@ -2,6 +2,16 @@
         TO DO
 
 
+    Scan full image directory
+    Show scaned folders individually as bookmarks below search bar
+    Update new images
+    Width adjust
+    Give name
+    Delete all button on show ignored?
+    Ignore need to
+    Both sides menu bar or floating over the image?
+
+
     Saved feedback when the file is saved
     There must be a recent file directory
     Show more info, the path, hide images
