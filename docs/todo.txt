@@ -2,14 +2,16 @@
         TO DO
 
 
-    Scan full image directory
-    Show scaned folders individually as bookmarks below search bar
     Update new images
+    Scan full image directory
+    Show scaned folders individually as bookmarks below path input
+    Love button / category
     Width adjust
-    Give name
-    Delete all button on show ignored?
-    Ignore need to
     Both sides menu bar or floating over the image?
+    Tag by folder, tag by image
+    Tag cloud below path input
+    Delete all button on show ignored?
+    webm support?
 
 
     Saved feedback when the file is saved
