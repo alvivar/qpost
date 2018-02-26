@@ -334,16 +334,12 @@
             }
 
 
-            async getFilesData(path) {
+            async getPathData(path) {
 
                 // Read the saved file for previously scanned paths
-                let savedPathData = await eel.loadpathfile(path)();
-                if (savedPathData.length > 0) {
-                    return savedPathData;
-                }
+                let savedData = await eel.loadpathfile(path)();
 
-
-                // Or scan the path for new data
+                // Scan the path for new data
                 let allow = ['*.gif', '*.jpg', '*.png']  // Only images
                 let files = await eel.get_files_dirs(path, allow)();
                 files = files[0];  // First element from the tuple result are the files, seconds dirs
@@ -357,7 +353,7 @@
                     localFiles = localFiles[0];
 
                     // Create a data node for each file
-                    let newData = localFiles.map(async (i, index) => ({
+                    let scannedData = localFiles.map(async (i, index) => ({
                         id : await eel.flatname(i, true)(),
                         file : files[index],
                         appFile : i.split('\\eeldata').pop(), // Relative to Eel app
@@ -366,8 +362,20 @@
                         published : false
                     }));
 
-                    await Promise.all(newData).then(promisedData => newData = promisedData);
-                    return newData;
+                    await Promise.all(scannedData).then(promisedData => scannedData = promisedData);
+
+                    // The difference between the scan and the saved data is the new data
+                    let oldData = [];
+                    let newData = [];
+                    scannedData.forEach(i => {
+                        let iSaved = savedData.filter(j => j.id == i.id);
+                        if (iSaved.length > 0)
+                            oldData.push(iSaved[0]);
+                        else
+                            newData.push(i);
+                    });
+
+                    return oldData.concat(newData);
                 }
             }
 
@@ -375,7 +383,7 @@
 
                 this.setState({ isWaiting : true });
 
-                let filesData = await this.getFilesData(this.state.path);
+                let filesData = await this.getPathData(this.state.path);
                 if (filesData && filesData.length > 0) {
 
                     this.setState({

@@ -158,4 +158,4 @@ def saveqbotfile(path):
         json.dump(qbot, f)
 
 
-eel.start('app.html', size=(450, 700))
+eel.start('app.html', size=(450, 750))

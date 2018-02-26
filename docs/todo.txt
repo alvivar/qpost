@@ -2,7 +2,6 @@
         TO DO
 
 
-    Update new images
     Scan full image directory
     Show scaned folders individually as bookmarks below path input
     Love button / category
@@ -21,6 +20,8 @@
 
     Drag and drop to detect path
 
+    2018/02/26 05:54 pm
+    x Update new images
 
     2018/02/20 07:08 pm
     x Ignored posts can be enabled again with the same button
