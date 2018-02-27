@@ -2,14 +2,14 @@
         TO DO
 
 
-    Save recent paths to app config data
-    Load recent paths from app config data
     Show ignore/loved count next to the button
     Show ignored, loved waiting feedback
-    Delete a recent path entry
+    Show saved feedback when the file is saved?
+    Sort by rank by clicking
+    bug Moving up/down needs to ignore true order when filtering by love/ignore
 
+    Delete a recent path entry
     A recent entry that doesn't exists (404) should be removed?
-    Saved feedback when the file is saved?
 
     Width adjust
     Tag by folder, tag by image
@@ -19,11 +19,13 @@
 
     webm support?
     Show more info, the path, hide images
-    Sort by rank by clicking
 
     Drag and drop to detect path
 
     2018/02/26 05:54 pm
+    x Load recent paths from app config data
+    x Save recent paths to app config data
+    x Ignore / Love scroll bar to the top
     x bug Images order is overwritten by the loading
     x Ignore button should move the scroll to a better place to avoid weirdness
     x Show scaned folders individually as bookmarks below path input

@@ -142,6 +142,10 @@ def loadpathfile(path, dirs=['eeldata', 'files']):
 
 @eel.expose
 def saveqbotfile(path):
+    """
+        Updates a Qbot file on the same path that contains the images and text
+        in the correct order and ready to be tweeted.
+    """
 
     pathdata = loadpathfile(path)
 
@@ -149,13 +153,47 @@ def saveqbotfile(path):
     for data in pathdata:
         if not data['ignore']:
             qbot['messages'].append({
-                'text': data['content'],
+                'text': data['text'],
                 'image': data['file']
             })
 
     qbotpath = os.path.join(path, 'qbot.json')
     with open(qbotpath, 'w') as f:
         json.dump(qbot, f)
+
+
+@eel.expose
+def saveconfigfile(data, dirs=['eeldata', 'config']):
+    """
+        Updates the configuration json file.
+    """
+
+    filepath = os.path.join(HOME, *dirs)
+    if not os.path.exists(filepath):
+        os.makedirs(filepath)
+
+    filename = os.path.join(filepath, 'config.json')
+
+    with open(filename, 'w') as f:
+        json.dump(data, f)
+
+
+@eel.expose
+def loadconfigfile(dirs=['eeldata', 'config']):
+    """
+        Updates the configuration json file.
+    """
+
+    filepath = os.path.join(HOME, *dirs)
+    filename = os.path.join(filepath, 'config.json')
+
+    try:
+        with open(filename, 'r') as f:
+            data = json.load(f)
+    except (IOError, ValueError):
+        data = {'recentPaths': []}
+
+    return data
 
 
 eel.start('app.html', size=(450, 750))

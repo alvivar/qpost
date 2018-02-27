@@ -127,7 +127,7 @@
                 let id = this.props.id;
                 let value = this.state.value;
                 let newData = this.props.data.map(i => {
-                    if (i.id === id) i.content = value;
+                    if (i.id === id) i.text = value;
                     return i;
                 });
 
@@ -200,6 +200,9 @@
 
             moveUp(id, e) {
 
+                // Scroll to the start of the current element
+                window.scrollTo(0, e.target.parentElement.parentElement.offsetTop);
+
                 // Find
                 let idIndex = this.props.data.findIndex(
                     i => i.id === id
@@ -217,6 +220,9 @@
             }
 
             moveDown(id, e) {
+
+                // Scroll to the start of the current element
+                window.scrollTo(0, e.target.parentElement.parentElement.offsetTop);
 
                 // Find
                 let idIndex = this.props.data.findIndex(
@@ -246,6 +252,7 @@
             }
 
             toggleShowLove() {
+                window.scrollTo(0, 0);
                 this.setState({
                     showLove : !this.state.showLove
                 });
@@ -272,6 +279,7 @@
             }
 
             toggleShowIgnore() {
+                window.scrollTo(0, 0);
                 this.setState({
                     showIgnore : !this.state.showIgnore
                 });
@@ -292,10 +300,11 @@
 
 
                 let posts = chosenData.map(data => {
+
                     let buttonLoveText = 'Love';
                     let buttonLoveClass = 'button card-footer-item'
                     if (data.love)
-                        buttonLoveClass = 'button is-primary card-footer-item'
+                        buttonLoveClass = 'button is-danger card-footer-item'
 
                     let buttonIgnoreText = 'Ignore';
                     let buttonIgnoreClass = '';
@@ -312,7 +321,7 @@
                                 </div>
                                 <div className="card-content">
                                     <div className="content">
-                                        <Post id={data.id} value={data.content} data={this.props.data} updateData={this.props.updateData} />
+                                        <Post id={data.id} value={data.text} data={this.props.data} updateData={this.props.updateData} />
                                     </div>
                                 </div>
                                 <footer className="card-footer">
@@ -386,12 +395,22 @@
             }
 
 
+            async componentWillMount() {
+                if (this.state.recentPaths.length > 0)
+                    return;
+
+                let config = await eel.loadconfigfile()();
+                this.setState({
+                    recentPaths : config['recentPaths']
+                });
+            }
+
+
             updatePathOnChange(e) {
                 this.setState({
                     path : e.target.value
                 });
             }
-
 
             async getPathData(path) {
 
@@ -416,7 +435,7 @@
                         id : await eel.flatname(i, true)(),
                         file : files[index],
                         appFile : i.split('\\eeldata').pop(), // Relative to Eel app
-                        content : "",
+                        text : "",
                         love : false,
                         ignore : false,
                         published : false
@@ -446,22 +465,30 @@
                 let pathData = await this.getPathData(this.state.path);
                 if (pathData && pathData.length > 0) {
 
-                    // Add the new path
-                    let pathRecentIndex = this.state.recentPaths.indexOf(this.state.path);
+                    // Recent paths to the top
+                    let recentPaths = this.state.recentPaths;
+                    let pathRecentIndex = recentPaths.indexOf(this.state.path);
+
                     if(pathRecentIndex === -1) {
+                        recentPaths = [this.state.path, ...recentPaths];
                         this.setState({
-                            recentPaths : [this.state.path, ...this.state.recentPaths]
+                            recentPaths : recentPaths
                         });
                     }
-                    // Move it first
                     else {
-                        let newRecent = this.state.recentPaths;
-                        newRecent.splice(pathRecentIndex, 1);  // Remove
+                        recentPaths.splice(pathRecentIndex, 1);  // Remove
+                        recentPaths = [this.state.path, ...recentPaths];
 
                         this.setState({
-                            recentPaths : [this.state.path, ...newRecent]
+                            recentPaths : recentPaths
                         });
                     }
+
+                    // Save them
+                    await eel.saveconfigfile({
+                        recentPaths : recentPaths
+                    })();
+
 
                     this.setState({
                         hasPath : true,
@@ -469,7 +496,6 @@
                         isWaiting : false,
                         data : pathData
                     });
-
                     await eel.savepathfile(this.state.path, pathData)();
                 }
                 else {
