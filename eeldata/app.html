@@ -127,7 +127,7 @@
                 return (
                     <div>
                         <span onClick={this.toggleEditMode}>
-                            {this.state.value.trim() ? this.state.value : <p className="help">(Click to edit)</p>}
+                            {this.state.value.trim() ? this.state.value : <p className="help">(Click to edit description)</p>}
                         </span>
                     </div>
                 );
@@ -269,7 +269,7 @@
 
 
                 let posts = chosenData.map(data => {
-                    let buttonLoveText = '<3';
+                    let buttonLoveText = 'Love';
                     let buttonLoveClass = 'button card-footer-item'
                     if (data.love)
                         buttonLoveClass = 'button is-primary card-footer-item'
@@ -393,6 +393,7 @@
                         file : files[index],
                         appFile : i.split('\\eeldata').pop(), // Relative to Eel app
                         content : "",
+                        love : false,
                         ignore : false,
                         published : false
                     }));
@@ -418,17 +419,17 @@
 
                 this.setState({ isWaiting : true });
 
-                let filesData = await this.getPathData(this.state.path);
-                if (filesData && filesData.length > 0) {
+                let pathData = await this.getPathData(this.state.path);
+                if (pathData && pathData.length > 0) {
 
                     this.setState({
                         hasPath : true,
                         hasError : false,
                         isWaiting : false,
-                        data : filesData
+                        data : pathData
                     });
 
-                    await eel.savepathfile(this.state.path, filesData)();
+                    await eel.savepathfile(this.state.path, pathData)();
                 }
                 else {
 
