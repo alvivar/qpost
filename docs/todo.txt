@@ -1,7 +1,6 @@
 
         TO DO
 
-    bug Images order is overwritten by the loading
 
     Save recent paths to app config data
     Load recent paths from app config data
@@ -25,6 +24,7 @@
     Drag and drop to detect path
 
     2018/02/26 05:54 pm
+    x bug Images order is overwritten by the loading
     x Ignore button should move the scroll to a better place to avoid weirdness
     x Show scaned folders individually as bookmarks below path input
     x There must be a recent path directory
