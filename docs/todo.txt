@@ -5,10 +5,9 @@
 
     Save recent paths to app config data
     Load recent paths from app config data
-    Delete a recent path entry
     Show ignore/loved count next to the button
     Show ignored, loved waiting feedback
-    Both sides menu bar or floating over the image?
+    Delete a recent path entry
 
     A recent entry that doesn't exists (404) should be removed?
     Saved feedback when the file is saved?
@@ -17,8 +16,9 @@
     Tag by folder, tag by image
     Tag cloud below path input
     Delete all button on show ignored?
-    webm support?
+    Menu bar floating over the image
 
+    webm support?
     Show more info, the path, hide images
     Sort by rank by clicking
 
