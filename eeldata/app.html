@@ -22,19 +22,37 @@
 
             constructor(props) {
                 super(props);
+
                 this.scanOnKeyDown = this.scanOnKeyDown.bind(this);
+                this.changePathOnClick = this.changePathOnClick.bind(this);
             }
 
 
             scanOnKeyDown(e) {
                 // Enter
-                if((e.keyCode == 10 || e.keyCode == 13)) {
+                if((e.keyCode === 10 || e.keyCode === 13)) {
                     this.props.scanPath(e);
                 }
             }
 
+            changePathOnClick(e, path) {
+                e.target.value = path;
+                this.props.updatePath(e);
+                this.textInput.focus();
+            }
+
 
             render() {
+
+                let recentPaths = this.props.recentPaths.map(i => {
+                    return (
+                        <p>
+                            <a onClick={e => this.changePathOnClick(e, i)}>{i}</a>
+                        </p>
+                    );
+                });
+
+
                 let buttonClass = 'button is-primary';
                 let buttonText = 'Scan';
 
@@ -53,11 +71,13 @@
                                 <nav className="level">
                                     <div className="level-item">
                                         <input
+                                            ref={(input) => this.textInput = input}
                                             autoFocus className="input" type="text" placeholder="Paste your path here and click 'Scan'"
                                             value={this.props.path} onChange={this.props.updatePath} onKeyDown={this.scanOnKeyDown} />
                                         <a className={buttonClass} onClick={this.props.scanPath}>{buttonText}</a>
                                     </div>
                                 </nav>
+                                {recentPaths}
                             </div>
                         </div>
                     </section>
@@ -107,7 +127,7 @@
                 let id = this.props.id;
                 let value = this.state.value;
                 let newData = this.props.data.map(i => {
-                    if (i.id == id) i.content = value;
+                    if (i.id === id) i.content = value;
                     return i;
                 });
 
@@ -117,7 +137,7 @@
 
             saveOnKeyDown(e) {
                 // Ctrl + Enter
-                if((e.keyCode == 10 || e.keyCode == 13) && e.ctrlKey) {
+                if((e.keyCode === 10 || e.keyCode === 13) && e.ctrlKey) {
                     this.saveData();
                 }
             }
@@ -182,7 +202,7 @@
 
                 // Find
                 let idIndex = this.props.data.findIndex(
-                    i => i.id == id
+                    i => i.id === id
                 );
 
                 // Move
@@ -200,7 +220,7 @@
 
                 // Find
                 let idIndex = this.props.data.findIndex(
-                    i => i.id == id
+                    i => i.id === id
                 );
 
                 // Move
@@ -218,7 +238,7 @@
 
                 // Toggle love
                 let newData = this.props.data.map(i => {
-                    if (i.id == id) i.love = !i.love;
+                    if (i.id === id) i.love = !i.love;
                     return i;
                 });
 
@@ -233,14 +253,17 @@
 
             toggleIgnore(id, e) {
 
+                // Scroll to the start of the current element
+                window.scrollTo(0, e.target.parentElement.parentElement.offsetTop);
+
                 // Toggle ignore
                 let newData = this.props.data.map(i => {
-                    if (i.id == id) i.ignore = !i.ignore;
+                    if (i.id === id) i.ignore = !i.ignore;
                     return i;
                 });
 
                 // Remove it and add it to the end
-                let idIndex = this.props.data.findIndex(i => i.id == id);
+                let idIndex = this.props.data.findIndex(i => i.id === id);
                 let value = newData[idIndex];
                 newData.splice(idIndex, 1);
                 newData.push(value);
@@ -280,7 +303,7 @@
                         buttonIgnoreText = 'Add again';
 
                     return (
-                        <div className="">
+                        <div>
                             <div className="card">
                                 <div className="card-image">
                                     <figure className="image">
@@ -332,7 +355,7 @@
                         </nav>
                         <div className="container">
                             <br />
-                            <div className="">
+                            <div>
                                 {posts}
                             </div>
                         </div>
@@ -351,6 +374,7 @@
                     hasPath : false,
                     hasError : false,
                     isWaiting : false,
+                    recentPaths : [],
                     path : '',
                     data : []
                 };
@@ -404,7 +428,7 @@
                     let oldData = [];
                     let newData = [];
                     scannedData.forEach(i => {
-                        let iSaved = savedData.filter(j => j.id == i.id);
+                        let iSaved = savedData.filter(j => j.id === i.id);
                         if (iSaved.length > 0)
                             oldData.push(iSaved[0]);
                         else
@@ -421,6 +445,23 @@
 
                 let pathData = await this.getPathData(this.state.path);
                 if (pathData && pathData.length > 0) {
+
+                    // Add the new path
+                    let pathRecentIndex = this.state.recentPaths.indexOf(this.state.path);
+                    if(pathRecentIndex === -1) {
+                        this.setState({
+                            recentPaths : [this.state.path, ...this.state.recentPaths]
+                        });
+                    }
+                    // Move it first
+                    else {
+                        let newRecent = this.state.recentPaths;
+                        newRecent.splice(pathRecentIndex, 1);  // Remove
+
+                        this.setState({
+                            recentPaths : [this.state.path, ...newRecent]
+                        });
+                    }
 
                     this.setState({
                         hasPath : true,
@@ -457,13 +498,13 @@
 
                 await eel.savepathfile(this.state.path, newData)();
                 await eel.saveqbotfile(this.state.path)();
-                console.log(newData);
             }
 
 
             renderPathInput() {
                 return (
                     <PathInput
+                        recentPaths={this.state.recentPaths}
                         path={this.state.path}
                         updatePath={this.updatePathOnChange}
                         scanPath={this.scanPathOnClick}

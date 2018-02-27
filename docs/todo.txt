@@ -1,25 +1,34 @@
 
         TO DO
 
+    bug Images order is overwritten by the loading
 
-    Show scaned folders individually as bookmarks below path input
-    Ignore button should move the scroll to a better place to avoid weirdness
-    Width adjust
+    Save recent paths to app config data
+    Load recent paths from app config data
+    Delete a recent path entry
+    Show ignore/loved count next to the button
+    Show ignored, loved waiting feedback
     Both sides menu bar or floating over the image?
+
+    A recent entry that doesn't exists (404) should be removed?
+    Saved feedback when the file is saved?
+
+    Width adjust
     Tag by folder, tag by image
     Tag cloud below path input
     Delete all button on show ignored?
     webm support?
 
-
-    Saved feedback when the file is saved
-    There must be a recent file directory
     Show more info, the path, hide images
     Sort by rank by clicking
 
     Drag and drop to detect path
 
     2018/02/26 05:54 pm
+    x Ignore button should move the scroll to a better place to avoid weirdness
+    x Show scaned folders individually as bookmarks below path input
+    x There must be a recent path directory
+    x Recent file directory list updates the path field
     x Show loved
     x Love button
     x Update new images
