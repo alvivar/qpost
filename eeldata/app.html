@@ -163,11 +163,16 @@
                 super(props);
 
                 this.state = {
-                    showIgnored : false
+                    showLove : false,
+                    showIgnore : false
                 };
 
                 this.moveUp = this.moveUp.bind(this);
                 this.moveDown = this.moveDown.bind(this);
+
+                this.toggleLove = this.toggleLove.bind(this);
+                this.toggleShowLove = this.toggleShowLove.bind(this);
+
                 this.toggleIgnore = this.toggleIgnore.bind(this);
                 this.toggleShowIgnore = this.toggleShowIgnore.bind(this);
             }
@@ -209,6 +214,23 @@
                 this.props.updateData(newData);
             }
 
+            toggleLove(id, e) {
+
+                // Toggle love
+                let newData = this.props.data.map(i => {
+                    if (i.id == id) i.love = !i.love;
+                    return i;
+                });
+
+                this.props.updateData(newData);
+            }
+
+            toggleShowLove() {
+                this.setState({
+                    showLove : !this.state.showLove
+                });
+            }
+
             toggleIgnore(id, e) {
 
                 // Toggle ignore
@@ -228,7 +250,7 @@
 
             toggleShowIgnore() {
                 this.setState({
-                    showIgnored : !this.state.showIgnored
+                    showIgnore : !this.state.showIgnore
                 });
             }
 
@@ -237,61 +259,74 @@
 
                 let chosenData = this.props.data;
 
-                if (this.state.showIgnored) {
+                if (this.state.showIgnore)
                     chosenData = chosenData.filter(i => i.ignore);
-                }
-                else {
+                else
                     chosenData = chosenData.filter(i => !i.ignore);
-                }
+
+                if (this.state.showLove)
+                    chosenData = chosenData.filter(i => i.love);
 
 
-                let buttonIgnoreClass = '';
-                let buttonIgnoreText = 'Ignore';
+                let posts = chosenData.map(data => {
+                    let buttonLoveText = '<3';
+                    let buttonLoveClass = 'button card-footer-item'
+                    if (data.love)
+                        buttonLoveClass = 'button is-primary card-footer-item'
 
-                if (this.state.showIgnored) {
-                    buttonIgnoreText = 'Add again';
-                }
+                    let buttonIgnoreText = 'Ignore';
+                    let buttonIgnoreClass = '';
+                    if (this.state.showIgnore)
+                        buttonIgnoreText = 'Add again';
 
-                let posts = chosenData.map(data =>
-                    <div className="">
-                        <div className="card">
-                            <div className="card-image">
-                                <figure className="image">
-                                    <img src={data.appFile} />
-                                </figure>
-                            </div>
-                            <div className="card-content">
-                                <div className="content">
-                                    <Post id={data.id} value={data.content} data={this.props.data} updateData={this.props.updateData} />
+                    return (
+                        <div className="">
+                            <div className="card">
+                                <div className="card-image">
+                                    <figure className="image">
+                                        <img src={data.appFile} />
+                                    </figure>
                                 </div>
+                                <div className="card-content">
+                                    <div className="content">
+                                        <Post id={data.id} value={data.content} data={this.props.data} updateData={this.props.updateData} />
+                                    </div>
+                                </div>
+                                <footer className="card-footer">
+                                    <a onClick={e => this.toggleLove(data.id, e)} className={buttonLoveClass}>{buttonLoveText}</a>
+                                    { !this.state.showIgnore ? <a onClick={e => this.moveUp(data.id, e)} className="button card-footer-item">Up</a> : null }
+                                    { !this.state.showIgnore ? <a onClick={e => this.moveDown(data.id, e)} className="button card-footer-item">Down</a> : null }
+                                    <a onClick={e => this.toggleIgnore(data.id, e)} className="button card-footer-item">{buttonIgnoreText}</a>
+                                </footer>
                             </div>
-                            <footer className="card-footer">
-                                { !this.state.showIgnored ? <a onClick={e => this.moveUp(data.id, e)} className="button card-footer-item">Up</a> : null }
-                                { !this.state.showIgnored ? <a onClick={e => this.moveDown(data.id, e)} className="button card-footer-item">Down</a> : null }
-                                <a onClick={e => this.toggleIgnore(data.id, e)} className="button card-footer-item">{buttonIgnoreText}</a>
-                            </footer>
+                            <hr />
                         </div>
-                        <hr />
-                    </div>
-                );
+                    );
+                });
 
 
-                let buttonShowClass = 'button';
-                let buttonShowText = 'Show ignored';
-
-                if (this.state.showIgnored) {
-                    buttonShowClass = 'button is-warning';
-                    buttonShowText = 'Hide ignored'
+                let buttonLoveText = 'Loved';
+                let buttonLoveClass = 'button';
+                if (this.state.showLove) {
+                    buttonLoveClass = 'button is-warning';
                 }
 
+                let buttonIgnoreText = 'Ignored';
+                let buttonIgnoreClass = 'button';
+                if (this.state.showIgnore) {
+                    buttonIgnoreClass = 'button is-warning';
+                }
 
                 return (
                     <section className="section">
                         <nav className="level navbar is-fixed-top">
                             <div className="level-item">
                                 <a className="button" onClick={this.props.clearPath}>Back</a>
-                                <a className={buttonShowClass} onClick={this.toggleShowIgnore}>
-                                    {buttonShowText}
+                                <a className={buttonLoveClass} onClick={this.toggleShowLove}>
+                                    {buttonLoveText}
+                                </a>
+                                <a className={buttonIgnoreClass} onClick={this.toggleShowIgnore}>
+                                    {buttonIgnoreText}
                                 </a>
                             </div>
                         </nav>
