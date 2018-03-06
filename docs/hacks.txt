@@ -28,3 +28,6 @@ https://stackoverflow.com/questions/32414308/updating-state-on-props-change-in-r
 
 Scroll to element
 https://stackoverflow.com/questions/43441856/reactjs-how-to-scroll-to-an-element
+
+Anaconda console on VSCode
+http://mscodingblog.blogspot.com/2017/08/setup-integrated-terminal-in-vs-code-to.html
