@@ -206,9 +206,7 @@
                 let allData = [...this.props.data, ...this.props.ignoreData];
 
                 // Find
-                let idIndex = allData.findIndex(
-                    i => i.id === id
-                );
+                let idIndex = allData.findIndex(i => i.id === id);
 
                 // Move
                 let newData = allData;
@@ -228,9 +226,7 @@
                 let allData = [...this.props.data, ...this.props.ignoreData];
 
                 // Find
-                let idIndex = allData.findIndex(
-                    i => i.id === id
-                );
+                let idIndex = allData.findIndex(i => i.id === id);
 
                 // Move
                 let newData = allData;
@@ -296,13 +292,22 @@
 
             render() {
 
-                let chosenData = this.props.data;
+                // Data filtering
+                let chosenData = [];
                 if (this.state.showIgnore)
                     chosenData = this.props.ignoreData;
+                else {
+                    if (this.state.showLove)
+                        chosenData = [...this.props.data, ...this.props.ignoreData];
+                    else
+                        chosenData = this.props.data;
+                }
+
                 if (this.state.showLove)
                     chosenData = chosenData.filter(i => i.love);
 
 
+                // Entry generation
                 let posts = chosenData.map(data => {
 
                     let buttonLoveText = 'Love';
