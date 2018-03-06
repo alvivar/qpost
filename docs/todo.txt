@@ -9,14 +9,17 @@
     x Separate ignore from main list
     x Save/load ignore from config
 
-    Show total images
-    Show ignore/loved count next to the button
-    Show ignored, loved waiting feedback
-    Show saved feedback when the file is saved?
-
+    x Is not neccesary to move the ignored at the end
+    x Show total images
+    x Show loved count
+    x Show ignore count
+    Show loved waiting feedback
+    Show ignored waiting feedback
     Random image when 'r' is pressed
+
     Delete button on the main toolbar
     Delete image list
+    Show saved feedback when the file is saved?
 
     Sort by rank by clicking
     Image width auto adjust

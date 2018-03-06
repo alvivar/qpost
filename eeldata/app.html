@@ -195,6 +195,8 @@
 
                 this.toggleIgnore = this.toggleIgnore.bind(this);
                 this.toggleShowIgnore = this.toggleShowIgnore.bind(this);
+
+                this.showNormal = this.showNormal.bind(this);
             }
 
 
@@ -314,12 +316,6 @@
                     return i;
                 });
 
-                // Remove it and add it to the end
-                let idIndex = newData.findIndex(i => i.id === id);
-                let value = newData[idIndex];
-                newData.splice(idIndex, 1);
-                newData.push(value);
-
                 this.props.updateData(newData);
             }
 
@@ -327,6 +323,14 @@
                 window.scrollTo(0, 0);
                 this.setState({
                     showIgnore : !this.state.showIgnore
+                });
+            }
+
+            showNormal() {
+                window.scrollTo(0, 0);
+                this.setState({
+                    showLove : false,
+                    showIgnore : false
                 });
             }
 
@@ -389,24 +393,31 @@
                     );
                 });
 
+                let buttonNormalText = `${this.props.dataCount} Main`;
+                let buttonNormalClass = 'button';
+                if (!this.state.showLove && !this.state.showIgnore)
+                    buttonNormalClass = 'button is-warning';
 
-                let buttonLoveText = 'Loved';
+                let buttonLoveText = `${this.props.loveCount} Love`;
                 let buttonLoveClass = 'button';
-                if (this.state.showLove) {
+                if (this.state.showLove)
                     buttonLoveClass = 'button is-warning';
-                }
 
-                let buttonIgnoreText = 'Ignored';
+                let buttonIgnoreText = `${this.props.ignoreCount} Ignored`;
                 let buttonIgnoreClass = 'button';
-                if (this.state.showIgnore) {
+                if (this.state.showIgnore)
                     buttonIgnoreClass = 'button is-warning';
-                }
 
                 return (
                     <section className="section">
                         <nav className="level navbar is-fixed-top">
                             <div className="level-item">
-                                <a className="button" onClick={this.props.clearPath}>Home</a>
+                                <a className="button" onClick={this.props.clearPath}>
+                                    Home
+                                </a>
+                                <a className={buttonNormalClass} onClick={this.showNormal}>
+                                    {buttonNormalText}
+                                </a>
                                 <a className={buttonLoveClass} onClick={this.toggleShowLove}>
                                     {buttonLoveText}
                                 </a>
@@ -439,7 +450,10 @@
                     recentPaths : [],
                     path : '',
                     data : [],
-                    ignoreData : []
+                    ignoreData : [],
+                    dataCount : 0,
+                    loveCount : 0,
+                    ignoreCount : 0
                 };
 
                 this.updatePathOnChange = this.updatePathOnChange.bind(this);
@@ -549,13 +563,17 @@
                         else
                             normalData.push(i);
                     });
+                    let loveData = [...normalData, ...ignoreData].filter(i => i.love);
 
                     this.setState({
                         hasPath : true,
                         hasError : false,
                         isWaiting : false,
                         data : normalData,
-                        ignoreData : ignoreData
+                        ignoreData : ignoreData,
+                        dataCount : normalData.length,
+                        loveCount : loveData.length,
+                        ignoreCount : ignoreData.length
                     });
 
                     await eel.savepathfile(this.state.path, pathData)();
@@ -590,15 +608,19 @@
                     else
                         normalData.push(i);
                 });
+                let loveData = [...normalData, ...ignoreData].filter(i => i.love);
 
                 this.setState({
                     data : normalData,
-                    ignoreData : ignoreData
+                    ignoreData : ignoreData,
+                    dataCount : normalData.length,
+                    loveCount : loveData.length,
+                    ignoreCount : ignoreData.length
                 });
 
 
                 // Files
-                await eel.savepathfile(this.state.path, [...normalData, ...ignoreData])();
+                await eel.savepathfile(this.state.path, allData)();
                 await eel.saveqbotfile(this.state.path)();
             }
 
@@ -620,6 +642,9 @@
                     <PostsCollection
                         data={this.state.data}
                         ignoreData={this.state.ignoreData}
+                        dataCount={this.state.dataCount}
+                        loveCount={this.state.loveCount}
+                        ignoreCount={this.state.ignoreCount}
                         updateData={this.updateData}
                         clearPath={this.clearPathOnClick} />
                 );
