@@ -38,7 +38,7 @@
             changePathOnClick(e, path) {
                 e.target.value = path;
                 this.props.updatePath(e);
-                this.textInput.focus();
+                this.pathInput.focus();
             }
 
 
@@ -71,7 +71,7 @@
                                 <nav className="level">
                                     <div className="level-item">
                                         <input
-                                            ref={(input) => this.textInput = input}
+                                            ref={(input) => this.pathInput = input}
                                             autoFocus className="input" type="text" placeholder="Paste your path here and click 'Scan'"
                                             value={this.props.path} onChange={this.props.updatePath} onKeyDown={this.scanOnKeyDown} />
                                         <a className={buttonClass} onClick={this.props.scanPath}>{buttonText}</a>
@@ -298,10 +298,13 @@
             }
 
             toggleShowLove() {
-                window.scrollTo(0, 0);
-                this.setState({
-                    showLove : !this.state.showLove
-                });
+                this.buttonLove.classList.toggle('is-loading');
+                setTimeout(function() {
+                    window.scrollTo(0, 0);
+                    this.setState({
+                        showLove : !this.state.showLove
+                    });
+                }.bind(this), 10);
             }
 
             toggleIgnore(id, e) {
@@ -320,18 +323,29 @@
             }
 
             toggleShowIgnore() {
-                window.scrollTo(0, 0);
-                this.setState({
-                    showIgnore : !this.state.showIgnore
-                });
+                this.buttonIgnore.classList.toggle('is-loading');
+                setTimeout(function() {
+                    window.scrollTo(0, 0);
+                    this.setState({
+                        showIgnore : !this.state.showIgnore
+                    });
+                }.bind(this), 10);
             }
 
             showNormal() {
-                window.scrollTo(0, 0);
-                this.setState({
-                    showLove : false,
-                    showIgnore : false
-                });
+                if (!this.state.showLove && !this.state.showIgnore) {
+                    window.scrollTo(0, 0);
+                    return;
+                }
+
+                this.buttonNormal.classList.toggle('is-loading');
+                setTimeout(function() {
+                    window.scrollTo(0, 0);
+                    this.setState({
+                        showLove : false,
+                        showIgnore : false
+                    });
+                }.bind(this), 10);
             }
 
 
@@ -415,13 +429,13 @@
                                 <a className="button" onClick={this.props.clearPath}>
                                     Home
                                 </a>
-                                <a className={buttonNormalClass} onClick={this.showNormal}>
+                                <a ref={(i) => this.buttonNormal = i} className={buttonNormalClass} onClick={this.showNormal}>
                                     {buttonNormalText}
                                 </a>
-                                <a className={buttonLoveClass} onClick={this.toggleShowLove}>
+                                <a ref={(i) => this.buttonLove = i} className={buttonLoveClass} onClick={this.toggleShowLove}>
                                     {buttonLoveText}
                                 </a>
-                                <a className={buttonIgnoreClass} onClick={this.toggleShowIgnore}>
+                                <a ref={(i) => this.buttonIgnore = i} className={buttonIgnoreClass} onClick={this.toggleShowIgnore}>
                                     {buttonIgnoreText}
                                 </a>
                             </div>
@@ -620,7 +634,7 @@
 
 
                 // Files
-                await eel.savepathfile(this.state.path, allData)();
+                await eel.savepathfile(this.state.path, [...normalData, ...ignoreData])();
                 await eel.saveqbotfile(this.state.path)();
             }
 
