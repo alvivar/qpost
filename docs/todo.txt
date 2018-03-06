@@ -1,20 +1,6 @@
 
         TO DO
 
-
-    x bug Editing the text fucks the ignore category
-    x bug Moving up/down needs to ignore true order when filtering by love/ignore
-    x Filtering join ignored and love
-    x Love button need to fix scroll on unlove
-    x Separate ignore from main list
-    x Save/load ignore from config
-
-    x Is not neccesary to move the ignored at the end
-    x Show total images
-    x Show loved count
-    x Show ignore count
-    Show loved waiting feedback
-    Show ignored waiting feedback
     Random image when 'r' is pressed
 
     Delete button on the main toolbar
@@ -36,6 +22,21 @@
     webm support?
     Drag and drop to detect path
 
+
+    2018/03/06 04:06 am
+    x Show normal waiting feedback
+    x Show loved waiting feedback
+    x Show ignored waiting feedback
+    x Show total images
+    x Show loved count
+    x Show ignore count
+    x bug Editing the text fucks the ignore category
+    x bug Moving up/down needs to ignore true order when filtering by love/ignore
+    x Filtering join ignored and love
+    x Love button need to fix scroll on unlove
+    x Separate ignore from main list
+    x Save/load ignore from config
+    x Is not neccesary to move the ignored at the end
 
     2018/02/26 05:54 pm
     x Load recent paths from app config data
