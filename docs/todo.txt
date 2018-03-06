@@ -2,11 +2,24 @@
         TO DO
 
 
+    Love button need to fix scroll
+    Show total images
     Show ignore/loved count next to the button
     Show ignored, loved waiting feedback
     Show saved feedback when the file is saved?
-    Sort by rank by clicking
+
+    Separate ignore from main list
+    Save/load ignore from config
+    Separate love from main list
+    Save/load love from config
     bug Moving up/down needs to ignore true order when filtering by love/ignore
+
+    Delete button on the main toolbar
+    Delete image list
+
+    Buttons to the top right next to the image
+    Sort by rank by clicking
+    Fit image height
 
     Delete a recent path entry
     A recent entry that doesn't exists (404) should be removed?
@@ -18,9 +31,8 @@
     Menu bar floating over the image
 
     webm support?
-    Show more info, the path, hide images
-
     Drag and drop to detect path
+
 
     2018/02/26 05:54 pm
     x Load recent paths from app config data
