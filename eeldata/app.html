@@ -244,7 +244,11 @@
 
                 // Toggle love
                 let newData = this.props.data.map(i => {
-                    if (i.id === id) i.love = !i.love;
+                    if (i.id === id) {
+                        i.love = !i.love;
+                        if (!i.love)  // Scroll to the start of the element on unlove
+                            window.scrollTo(0, e.target.parentElement.parentElement.offsetTop);
+                    }
                     return i;
                 });
 
