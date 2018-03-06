@@ -31,3 +31,9 @@ https://stackoverflow.com/questions/43441856/reactjs-how-to-scroll-to-an-element
 
 Anaconda console on VSCode
 http://mscodingblog.blogspot.com/2017/08/setup-integrated-terminal-in-vs-code-to.html
+
+Checking if key exists in array
+https://stackoverflow.com/questions/17245397/checking-for-a-numerical-index-in-a-javascript-array
+
+Getting undefined as constant
+https://stackoverflow.com/questions/1291942/what-does-javascriptvoid0-mean
