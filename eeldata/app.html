@@ -126,7 +126,7 @@
 
                 let id = this.props.id;
                 let value = this.state.value;
-                let newData = this.props.data.map(i => {
+                let newData = [...this.props.data, ...this.props.ignoreData].map(i => {
                     if (i.id === id) i.text = value;
                     return i;
                 });
@@ -198,24 +198,50 @@
             }
 
 
+            getBrothersIds(id, data) {
+                let idIndex = data.findIndex(i => i.id === id);
+                let upId = data[idIndex - 1] !== void 0 ? data[idIndex - 1].id : false;
+                let downId = data[idIndex + 1] !== void 0 ? data[idIndex + 1].id : false;
+
+                return {
+                    up : upId,
+                    down : downId
+                };
+            }
+
             moveUp(id, e) {
 
                 // Scroll to the start of the current element
                 window.scrollTo(0, e.target.parentElement.parentElement.offsetTop);
 
-                let allData = [...this.props.data, ...this.props.ignoreData];
-
                 // Find
+                let allData = [...this.props.data, ...this.props.ignoreData];
                 let idIndex = allData.findIndex(i => i.id === id);
 
-                // Move
-                let newData = allData;
-                let value = newData[idIndex];
-                newData.splice(idIndex, 1);  // Remove
-                idIndex = idIndex > 0 ? idIndex - 1 : 0;  // Up
-                newData.splice(idIndex, 0, value);  // Insert
+                // Love is a special case
+                if (this.state.showLove) {
+                    let ids = this.getBrothersIds(id, allData.filter(i => i.love));
+                    if (ids.up)
+                    {
+                        // Extract
+                        let value = allData[idIndex];
+                        allData.splice(idIndex, 1);  // Remove
 
-                this.props.updateData(newData);
+                        // Insert
+                        let upIndex = allData.findIndex(i => i.id === ids.up);
+                        allData.splice(upIndex, 0, value);
+                    }
+
+                    return this.props.updateData(allData);
+                }
+
+                // Move
+                let value = allData[idIndex];
+                allData.splice(idIndex, 1);  // Remove
+                idIndex = idIndex > 0 ? idIndex - 1 : 0;  // Up
+                allData.splice(idIndex, 0, value);  // Insert
+
+                this.props.updateData(allData);
             }
 
             moveDown(id, e) {
@@ -223,19 +249,34 @@
                 // Scroll to the start of the current element
                 window.scrollTo(0, e.target.parentElement.parentElement.offsetTop);
 
-                let allData = [...this.props.data, ...this.props.ignoreData];
-
                 // Find
+                let allData = [...this.props.data, ...this.props.ignoreData];
                 let idIndex = allData.findIndex(i => i.id === id);
 
-                // Move
-                let newData = allData;
-                let value = newData[idIndex];
-                newData.splice(idIndex, 1);  // Remove
-                idIndex = idIndex + 1;  // Down
-                newData.splice(idIndex, 0, value);  // Insert
+                // Love is a special case
+                if (this.state.showLove) {
+                    let ids = this.getBrothersIds(id, allData.filter(i => i.love));
+                    if (ids.down)
+                    {
+                        // Extract
+                        let value = allData[idIndex];
+                        allData.splice(idIndex, 1);  // Remove
 
-                this.props.updateData(newData);
+                        // Insert
+                        let upIndex = allData.findIndex(i => i.id === ids.down);
+                        allData.splice(upIndex + 1, 0, value);
+                    }
+
+                    return this.props.updateData(allData);
+                }
+
+                // Move
+                let value = allData[idIndex];
+                allData.splice(idIndex, 1);  // Remove
+                idIndex = idIndex + 1;  // Down
+                allData.splice(idIndex, 0, value);  // Insert
+
+                this.props.updateData(allData);
             }
 
             toggleLove(id, e) {
@@ -317,7 +358,7 @@
 
                     let buttonIgnoreText = 'Ignore';
                     let buttonIgnoreClass = '';
-                    if (this.state.showIgnore)
+                    if (data.ignore)
                         buttonIgnoreText = 'Add again';
 
                     return (
@@ -330,7 +371,10 @@
                                 </div>
                                 <div className="card-content">
                                     <div className="content">
-                                        <Post id={data.id} value={data.text} data={this.props.data} updateData={this.props.updateData} />
+                                        <Post
+                                            id={data.id} value={data.text}
+                                            data={this.props.data} ignoreData={this.props.ignoreData}
+                                            updateData={this.props.updateData} />
                                     </div>
                                 </div>
                                 <footer className="card-footer">
