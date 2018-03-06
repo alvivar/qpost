@@ -203,15 +203,16 @@
                 // Scroll to the start of the current element
                 window.scrollTo(0, e.target.parentElement.parentElement.offsetTop);
 
+                let allData = [...this.props.data, ...this.props.ignoreData];
+
                 // Find
-                let idIndex = this.props.data.findIndex(
+                let idIndex = allData.findIndex(
                     i => i.id === id
                 );
 
                 // Move
-                let newData = this.props.data;
+                let newData = allData;
                 let value = newData[idIndex];
-
                 newData.splice(idIndex, 1);  // Remove
                 idIndex = idIndex > 0 ? idIndex - 1 : 0;  // Up
                 newData.splice(idIndex, 0, value);  // Insert
@@ -224,15 +225,16 @@
                 // Scroll to the start of the current element
                 window.scrollTo(0, e.target.parentElement.parentElement.offsetTop);
 
+                let allData = [...this.props.data, ...this.props.ignoreData];
+
                 // Find
-                let idIndex = this.props.data.findIndex(
+                let idIndex = allData.findIndex(
                     i => i.id === id
                 );
 
                 // Move
-                let newData = this.props.data;
+                let newData = allData;
                 let value = newData[idIndex];
-
                 newData.splice(idIndex, 1);  // Remove
                 idIndex = idIndex + 1;  // Down
                 newData.splice(idIndex, 0, value);  // Insert
@@ -243,10 +245,11 @@
             toggleLove(id, e) {
 
                 // Toggle love
-                let newData = this.props.data.map(i => {
+                let allData = [...this.props.data, ...this.props.ignoreData];
+                let newData = allData.map(i => {
                     if (i.id === id) {
                         i.love = !i.love;
-                        if (!i.love)  // Scroll to the start of the element on unlove
+                        if (this.state.showLove && !i.love)  // Scroll to the start of the element on unlove
                             window.scrollTo(0, e.target.parentElement.parentElement.offsetTop);
                     }
                     return i;
@@ -268,13 +271,14 @@
                 window.scrollTo(0, e.target.parentElement.parentElement.offsetTop);
 
                 // Toggle ignore
-                let newData = this.props.data.map(i => {
+                let allData = [...this.props.data, ...this.props.ignoreData];
+                let newData = allData.map(i => {
                     if (i.id === id) i.ignore = !i.ignore;
                     return i;
                 });
 
                 // Remove it and add it to the end
-                let idIndex = this.props.data.findIndex(i => i.id === id);
+                let idIndex = newData.findIndex(i => i.id === id);
                 let value = newData[idIndex];
                 newData.splice(idIndex, 1);
                 newData.push(value);
@@ -293,12 +297,8 @@
             render() {
 
                 let chosenData = this.props.data;
-
                 if (this.state.showIgnore)
-                    chosenData = chosenData.filter(i => i.ignore);
-                else
-                    chosenData = chosenData.filter(i => !i.ignore);
-
+                    chosenData = this.props.ignoreData;
                 if (this.state.showLove)
                     chosenData = chosenData.filter(i => i.love);
 
@@ -330,8 +330,8 @@
                                 </div>
                                 <footer className="card-footer">
                                     <a onClick={e => this.toggleLove(data.id, e)} className={buttonLoveClass}>{buttonLoveText}</a>
-                                    { !this.state.showIgnore ? <a onClick={e => this.moveUp(data.id, e)} className="button card-footer-item">Up</a> : null }
-                                    { !this.state.showIgnore ? <a onClick={e => this.moveDown(data.id, e)} className="button card-footer-item">Down</a> : null }
+                                    <a onClick={e => this.moveUp(data.id, e)} className="button card-footer-item">Up</a>
+                                    <a onClick={e => this.moveDown(data.id, e)} className="button card-footer-item">Down</a>
                                     <a onClick={e => this.toggleIgnore(data.id, e)} className="button card-footer-item">{buttonIgnoreText}</a>
                                 </footer>
                             </div>
@@ -389,7 +389,8 @@
                     isWaiting : false,
                     recentPaths : [],
                     path : '',
-                    data : []
+                    data : [],
+                    ignoreData : []
                 };
 
                 this.updatePathOnChange = this.updatePathOnChange.bind(this);
@@ -438,11 +439,10 @@
                     let scannedData = localFiles.map(async (i, index) => ({
                         id : await eel.flatname(i, true)(),
                         file : files[index],
-                        appFile : i.split('\\eeldata').pop(), // Relative to Eel app
+                        appFile : i.split('\\eeldata').pop(), // Path relative to Eel app
                         text : "",
                         love : false,
-                        ignore : false,
-                        published : false
+                        ignore : false
                     }));
 
                     await Promise.all(scannedData).then(promisedData => scannedData = promisedData);
@@ -475,18 +475,15 @@
 
                     if(pathRecentIndex === -1) {
                         recentPaths = [this.state.path, ...recentPaths];
-                        this.setState({
-                            recentPaths : recentPaths
-                        });
                     }
                     else {
                         recentPaths.splice(pathRecentIndex, 1);  // Remove
                         recentPaths = [this.state.path, ...recentPaths];
-
-                        this.setState({
-                            recentPaths : recentPaths
-                        });
                     }
+
+                    this.setState({
+                        recentPaths : recentPaths
+                    });
 
                     // Save them
                     await eel.saveconfigfile({
@@ -494,12 +491,24 @@
                     })();
 
 
+                    // Divide them
+                    let normalData = [];
+                    let ignoreData = [];
+                    pathData.forEach(i => {
+                        if (i.ignore)
+                            ignoreData.push(i);
+                        else
+                            normalData.push(i);
+                    });
+
                     this.setState({
                         hasPath : true,
                         hasError : false,
                         isWaiting : false,
-                        data : pathData
+                        data : normalData,
+                        ignoreData : ignoreData
                     });
+
                     await eel.savepathfile(this.state.path, pathData)();
                 }
                 else {
@@ -522,11 +531,25 @@
             }
 
             async updateData(newData) {
-                this.setState({
-                    data : newData
+
+                // Divide
+                let normalData = [];
+                let ignoreData = [];
+                newData.forEach(i => {
+                    if (i.ignore)
+                        ignoreData.push(i);
+                    else
+                        normalData.push(i);
                 });
 
-                await eel.savepathfile(this.state.path, newData)();
+                this.setState({
+                    data : normalData,
+                    ignoreData : ignoreData
+                });
+
+
+                // Files
+                await eel.savepathfile(this.state.path, [...normalData, ...ignoreData])();
                 await eel.saveqbotfile(this.state.path)();
             }
 
@@ -547,6 +570,7 @@
                 return (
                     <PostsCollection
                         data={this.state.data}
+                        ignoreData={this.state.ignoreData}
                         updateData={this.updateData}
                         clearPath={this.clearPathOnClick} />
                 );
