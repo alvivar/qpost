@@ -2,27 +2,29 @@
         TO DO
 
 
+    x bug Editing the text fucks the ignore category
+    x bug Moving up/down needs to ignore true order when filtering by love/ignore
+    x Filtering join ignored and love
     x Love button need to fix scroll on unlove
     x Separate ignore from main list
     x Save/load ignore from config
 
-    bug Moving up/down needs to ignore true order when filtering by love/ignore
     Show total images
     Show ignore/loved count next to the button
     Show ignored, loved waiting feedback
     Show saved feedback when the file is saved?
 
+    Random image when 'r' is pressed
     Delete button on the main toolbar
     Delete image list
 
-    Buttons to the top right next to the image
     Sort by rank by clicking
-    Fit image height
+    Image width auto adjust
+    Buttons to the top right next to the image
 
     Delete a recent path entry
     A recent entry that doesn't exists (404) should be removed?
 
-    Width adjust
     Tag by folder, tag by image
     Tag cloud below path input
     Delete all button on show ignored?
