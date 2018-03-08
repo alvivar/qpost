@@ -1,6 +1,7 @@
 
         TO DO
 
+
     Random image when 'r' is pressed
     app files to their own folder inside eeldata
 
