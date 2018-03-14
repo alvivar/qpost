@@ -196,4 +196,4 @@ def loadconfigfile(dirs=['eeldata', 'config']):
     return data
 
 
-eel.start('app.html', size=(450, 750))
+eel.start('app.html', size=(500, 700))
