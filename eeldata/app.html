@@ -5,12 +5,12 @@
     <title>Qpost</title>
 
     <script type='text/javascript' src='/eel.js'></script>
-    <script src="/js/react.production.min.js"></script>
-    <script src="/js/react-dom.production.min.js"></script>
-    <script src="/js/babel.min.js"></script>
+    <script src="/web/js/react.production.min.js"></script>
+    <script src="/web/js/react-dom.production.min.js"></script>
+    <script src="/web/js/babel.min.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="/css/bulma.min.css" />
-    <link rel="shortcut icon" type="image/png" href="/img/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="/web/css/bulma.min.css" />
+    <link rel="shortcut icon" type="image/png" href="/web/img/favicon.ico" />
 </head>
 
 <body>
@@ -187,6 +187,9 @@
                     showIgnore : false
                 };
 
+                this.cardsRef = [];
+                this.lastRandomCards = [];
+
                 this.moveUp = this.moveUp.bind(this);
                 this.moveDown = this.moveDown.bind(this);
 
@@ -197,6 +200,46 @@
                 this.toggleShowIgnore = this.toggleShowIgnore.bind(this);
 
                 this.showNormal = this.showNormal.bind(this);
+                this.handleShorcuts = this.handleShorcuts.bind(this);
+            }
+
+            componentWillUpdate() {
+                console.log('Card refs cleaned')
+                this.cardsRef = [];  // New refs after every render
+                this.lastRandomCards = [];
+            }
+
+            componentDidMount() {
+                document.addEventListener('keydown', this.handleShorcuts);
+            }
+
+            componentWillUnmount() {
+                document.removeEventListener('keydown', this.handleShorcuts);
+            }
+
+            randomInt(min, max) {
+                return Math.floor(Math.random() * (max - min + 1)) + min;
+            }
+
+            handleShorcuts(e) {
+
+                // 'r' Go to random image card
+                if(e.keyCode === 82) {
+
+                    let cards = this.cardsRef.filter(i => i !== null);
+                    let count = cards.length;
+                    if (count <= 0) return;
+
+                    let random = this.randomInt(0, count-1);
+                    while (this.lastRandomCards.indexOf(random) !== -1)
+                        random = this.randomInt(0, count-1);
+                    this.lastRandomCards.push(random);
+
+                    if (this.lastRandomCards.length > count/5*4)
+                        this.lastRandomCards.splice(0, 1);
+
+                    window.scrollTo(0, cards[random].offsetTop);
+                }
             }
 
 
@@ -297,16 +340,6 @@
                 this.props.updateData(newData);
             }
 
-            toggleShowLove() {
-                this.buttonLove.classList.toggle('is-loading');
-                setTimeout(function() {
-                    window.scrollTo(0, 0);
-                    this.setState({
-                        showLove : !this.state.showLove
-                    });
-                }.bind(this), 10);
-            }
-
             toggleIgnore(id, e) {
 
                 // Scroll to the start of the current element
@@ -320,6 +353,16 @@
                 });
 
                 this.props.updateData(newData);
+            }
+
+            toggleShowLove() {
+                this.buttonLove.classList.toggle('is-loading');
+                setTimeout(function() {
+                    window.scrollTo(0, 0);
+                    this.setState({
+                        showLove : !this.state.showLove
+                    });
+                }.bind(this), 10);
             }
 
             toggleShowIgnore() {
@@ -381,7 +424,7 @@
 
                     return (
                         <div>
-                            <div className="card">
+                            <div className="card" ref={card => this.cardsRef.push(card)}>
                                 <div className="card-image">
                                     <figure className="image">
                                         <img src={data.appFile} />
