@@ -430,21 +430,33 @@
             }
 
             toggleShowLove() {
+                if (this.state.showLove) {
+                    window.scrollTo(0, 0);
+                    return;
+                }
+
                 this.buttonLove.classList.toggle('is-loading');
                 setTimeout(function() {
                     window.scrollTo(0, 0);
                     this.setState({
-                        showLove : !this.state.showLove
+                        showLove : true,
+                        showIgnore : false
                     });
                 }.bind(this), 10);
             }
 
             toggleShowIgnore() {
+                if (this.state.showIgnore) {
+                    window.scrollTo(0, 0);
+                    return;
+                }
+
                 this.buttonIgnore.classList.toggle('is-loading');
                 setTimeout(function() {
                     window.scrollTo(0, 0);
                     this.setState({
-                        showIgnore : !this.state.showIgnore
+                        showIgnore : true,
+                        showLove : false,
                     });
                 }.bind(this), 10);
             }
