@@ -188,34 +188,59 @@
                 };
 
                 this.cardsRef = [];
+                this.cardsVisible = [];
                 this.lastRandomCards = [];
+
+                this.visibilityInterval = false;
 
                 this.moveUp = this.moveUp.bind(this);
                 this.moveDown = this.moveDown.bind(this);
-
                 this.toggleLove = this.toggleLove.bind(this);
                 this.toggleShowLove = this.toggleShowLove.bind(this);
-
                 this.toggleIgnore = this.toggleIgnore.bind(this);
                 this.toggleShowIgnore = this.toggleShowIgnore.bind(this);
-
                 this.showNormal = this.showNormal.bind(this);
                 this.handleShorcuts = this.handleShorcuts.bind(this);
+                this.isScrolledIntoView = this.isScrolledIntoView.bind(this);
             }
 
             componentWillUpdate() {
-                console.log('Card refs cleaned')
-                this.cardsRef = [];  // New refs after every render
+                this.cardsRef = [];  // New cards refs every render
+                this.cardsVisible = [];
                 this.lastRandomCards = [];
             }
 
             componentDidMount() {
                 document.addEventListener('keydown', this.handleShorcuts);
+
+                this.visibilityInterval = setInterval(function() {
+                    this.cardsVisible = this.cardsRef.reduce((list, i) => {
+                        if (i === null)
+                            return list;
+
+                        let index = list.indexOf(i);
+                        if (!this.isScrolledIntoView(i)) {
+                            if (index !== -1)
+                            {
+                                list.splice(index, 1);
+                            }
+                        } else {
+                            if (index === -1) {
+                                list.unshift(i);
+                            }
+                        }
+
+                        return list;
+                    },
+                    this.cardsVisible);
+                }.bind(this), 500);
             }
 
             componentWillUnmount() {
                 document.removeEventListener('keydown', this.handleShorcuts);
+                clearInterval(this.visibilityInterval);
             }
+
 
             randomInt(min, max) {
                 return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -223,12 +248,22 @@
 
             handleShorcuts(e) {
 
-                // 'r' Go to random image card
-                if(e.keyCode === 82) {
+                let cards = this.cardsRef.filter(i => i !== null);
+                let count = cards.length;
+                if (count < 1) return;
 
-                    let cards = this.cardsRef.filter(i => i !== null);
-                    let count = cards.length;
-                    if (count <= 0) return;
+                // Sort by closest to the scroll
+                let scrollTop = document.documentElement.scrollTop;
+                this.cardsVisible.sort((a, b) => {
+                    return Math.abs(scrollTop - a.offsetTop) - Math.abs(scrollTop - b.offsetTop)
+                });
+                let currentCard = this.cardsVisible[0];
+                if (currentCard === void 0)
+                        return;
+
+
+                // 'n' goes to a random image card
+                if (e.keyCode === 78) {
 
                     let random = this.randomInt(0, count-1);
                     while (this.lastRandomCards.indexOf(random) !== -1)
@@ -240,6 +275,48 @@
 
                     window.scrollTo(0, cards[random].offsetTop);
                 }
+
+                // 'j' goes to the next image
+                else if (e.keyCode === 74) {
+                    let currentIndex = cards.indexOf(currentCard);
+                    let nextCard = cards[currentIndex+1];
+                    if (nextCard !== void 0)
+                        window.scrollTo(0, nextCard.offsetTop);
+                    else
+                        window.scrollTo(0, currentCard.offsetTop);
+                }
+
+                // 'k' goes to the previous image
+                else if (e.keyCode === 75) {
+                    let currentIndex = cards.indexOf(currentCard);
+                    let nextCard = cards[currentIndex-1];
+                    if (nextCard !== void 0)
+                        window.scrollTo(0, nextCard.offsetTop);
+                    else
+                        window.scrollTo(0, currentCard.offsetTop);
+                }
+
+                // 'l' love the image
+                else if (e.keyCode === 76) {
+                    this.toggleLove(currentCard.id, null, currentCard.offsetTop);
+                }
+
+                // 'i' ignore the image
+                else if (e.keyCode === 73) {
+                    this.toggleIgnore(currentCard.id, null, currentCard.offsetTop);
+                }
+            }
+
+            isScrolledIntoView(el) {
+                let rect = el.getBoundingClientRect();
+                let elemTop = rect.top;
+                let elemBottom = rect.bottom;
+
+                // Only completely visible elements return true:
+                let isVisible = (elemTop >= 0) && (elemBottom <= window.innerHeight);
+                // Partially visible elements return true:
+                isVisible = elemTop < window.innerHeight && elemBottom >= 0;
+                return isVisible;
             }
 
 
@@ -324,7 +401,9 @@
                 this.props.updateData(allData);
             }
 
-            toggleLove(id, e) {
+            toggleLove(id, e, offsetTop=false) {
+
+                let scrollOffset = offsetTop ? offsetTop : e.target.parentElement.parentElement.offsetTop;
 
                 // Toggle love
                 let allData = [...this.props.data, ...this.props.ignoreData];
@@ -332,7 +411,7 @@
                     if (i.id === id) {
                         i.love = !i.love;
                         if (this.state.showLove && !i.love)  // Scroll to the start of the element on unlove
-                            window.scrollTo(0, e.target.parentElement.parentElement.offsetTop);
+                            window.scrollTo(0, scrollOffset);
                     }
                     return i;
                 });
@@ -340,10 +419,11 @@
                 this.props.updateData(newData);
             }
 
-            toggleIgnore(id, e) {
+            toggleIgnore(id, e, offsetTop=false) {
 
                 // Scroll to the start of the current element
-                window.scrollTo(0, e.target.parentElement.parentElement.offsetTop);
+                let scrollOffset = offsetTop ? offsetTop : e.target.parentElement.parentElement.offsetTop;
+                window.scrollTo(0, scrollOffset);
 
                 // Toggle ignore
                 let allData = [...this.props.data, ...this.props.ignoreData];
@@ -424,7 +504,7 @@
 
                     return (
                         <div>
-                            <div className="card" ref={card => this.cardsRef.push(card)}>
+                            <div className="card" ref={card => this.cardsRef.push(card)} id={data.id}>
                                 <div className="card-image">
                                     <figure className="image">
                                         <img src={data.appFile} />
