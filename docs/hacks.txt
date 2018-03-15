@@ -2,6 +2,21 @@
         HACKS
 
 
+JS random number between two
+https://stackoverflow.com/questions/4959975/generate-random-number-between-two-numbers-in-javascript
+
+A map that ignores values
+https://stackoverflow.com/questions/27110212/js-array-map-dont-add-to-array
+
+Adding elements at the beginning of a JS list
+https://stackoverflow.com/questions/8073673/how-can-i-add-new-array-elements-at-the-beginning-of-an-array-in-javascript
+
+Check if an element is visible by the main view
+https://stackoverflow.com/questions/487073/check-if-element-is-visible-after-scrolling
+
+Get the scroll position
+https://stackoverflow.com/questions/4096863/how-to-get-and-set-the-current-web-page-scroll-position
+
 Render after a promise in React
 https://medium.com/front-end-hacking/async-await-with-react-lifecycle-methods-802e7760d802
 
