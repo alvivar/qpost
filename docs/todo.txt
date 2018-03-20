@@ -17,6 +17,8 @@
 
     Delete button on ignores images
     Delete real images
+    Extract love ones
+    Loved images should be noticeable
 
     Image width auto adjust to fit screen
     Webm support
