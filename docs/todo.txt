@@ -19,6 +19,7 @@
     Delete real images
     Extract love ones
     Loved images should be noticeable
+    Rename images by order
 
     Image width auto adjust to fit screen
     Webm support
