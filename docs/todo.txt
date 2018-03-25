@@ -15,10 +15,13 @@
     x Love only show love
     x Ignore only show ignore
 
+    2018/03/25 05:04 pm
+    x React code in his own file
+
+    Loved images should be noticeable
     Delete button on ignores images
     Delete real images
     Extract love ones
-    Loved images should be noticeable
     Rename images by order
 
     Image width auto adjust to fit screen
