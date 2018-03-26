@@ -2,7 +2,10 @@
         TO DO
 
 
-    Button shorcuts for each part
+    Trash button sometime dissapear, make it stable
+    Button shorcuts for each main part
+    Shortcut to go back to the last
+    Add current images to the same random list to ignore them
 
     Extract love ones
     Rename images by order
