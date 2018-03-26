@@ -28,8 +28,8 @@ class PathInput extends React.Component {
       );
     });
 
-    let buttonClass = "button is-primary";
-    let buttonText = "Scan";
+    let buttonClass = "button";
+    let buttonText = "";
 
     if (this.props.error) {
       buttonClass = "button is-danger";
@@ -55,7 +55,10 @@ class PathInput extends React.Component {
                   onKeyDown={this.scanOnKeyDown}
                 />
                 <a className={buttonClass} onClick={this.props.scanPath}>
-                  {buttonText}
+                  <span className="icon">
+                    <img src="/web/img/search.svg" alt="Scan" />
+                  </span>
+                  {buttonText ? <span>{buttonText}</span> : null}
                 </a>
               </div>
             </nav>
@@ -184,6 +187,7 @@ class PostsCollection extends React.Component {
 
   componentWillUpdate() {
     this.cardsRef = []; // New cards refs every render
+    this.lastRandomCards = [];
   }
 
   componentDidMount() {
@@ -215,6 +219,7 @@ class PostsCollection extends React.Component {
 
     if (e.keyCode === 78) {
       // 'n' goes to a random image card
+
       let random = this.randomInt(0, count - 1);
       while (this.lastRandomCards.indexOf(random) !== -1)
         random = this.randomInt(0, count - 1);
@@ -461,79 +466,105 @@ class PostsCollection extends React.Component {
 
     // Entry generation
     let posts = chosenData.map(data => {
-      let buttonLoveText = "Love";
       let buttonLoveClass = "button card-footer-item";
       if (data.love) buttonLoveClass = "button is-danger card-footer-item";
 
-      let buttonIgnoreText = "Ignore";
-      let buttonIgnoreClass = "";
-      if (data.ignore) buttonIgnoreText = "Add again";
-
       return (
         <div>
+          <hr />
           <div
-            className="card"
+            className="columns is-mobile is-gapless"
             ref={card => this.cardsRef.push(card)}
             id={data.id}
           >
-            <div className="card-image">
+            <div className="column">
               <figure className="image">
                 <img src={data.appFile} />
               </figure>
             </div>
-            <div className="card-content">
-              <div className="content">
-                <Post
-                  id={data.id}
-                  value={data.text}
-                  data={this.props.data}
-                  ignoreData={this.props.ignoreData}
-                  updateData={this.props.updateData}
-                />
-              </div>
-            </div>
-            <footer className="card-footer">
+            <div className="column is-1">
               <a
                 onClick={e => this.toggleLove(data.id, e)}
                 className={buttonLoveClass}
               >
-                {buttonLoveText}
+                <img
+                  src="/web/img/heart.svg"
+                  alt="Love"
+                  style={{
+                    margin: "10px",
+                    maxWidth: "20px",
+                    maxHeight: "20px"
+                  }}
+                />
               </a>
               <a
                 onClick={e => this.moveUp(data.id, e)}
                 className="button card-footer-item"
               >
-                Up
+                <img
+                  src="/web/img/caret-up.svg"
+                  alt="Up"
+                  style={{
+                    margin: "10px",
+                    maxWidth: "25px",
+                    maxHeight: "25px"
+                  }}
+                />
               </a>
               <a
                 onClick={e => this.moveDown(data.id, e)}
                 className="button card-footer-item"
               >
-                Down
+                <img
+                  src="/web/img/caret-down.svg"
+                  alt="Down"
+                  style={{
+                    margin: "10px",
+                    maxWidth: "25px",
+                    maxHeight: "25px"
+                  }}
+                />
               </a>
               <a
                 onClick={e => this.toggleIgnore(data.id, e)}
                 className="button card-footer-item"
               >
-                {buttonIgnoreText}
+                <img
+                  src="/web/img/ban.svg"
+                  alt="Ignore"
+                  style={{
+                    margin: "10px",
+                    maxWidth: "20px",
+                    maxHeight: "20px"
+                  }}
+                />
               </a>
-            </footer>
+            </div>
+          </div>
+          <div className="column">
+            <Post
+              id={data.id}
+              value={data.text}
+              data={this.props.data}
+              ignoreData={this.props.ignoreData}
+              updateData={this.props.updateData}
+            />
           </div>
           <hr />
         </div>
       );
     });
 
-    let buttonNormalText = `${this.props.dataCount} Main`;
+    let buttonNormalText = `${this.props.dataCount}`;
     let buttonNormalClass = "button";
     if (!this.state.showLove && !this.state.showIgnore)
       buttonNormalClass = "button is-warning";
 
-    let buttonLoveText = `${this.props.loveCount} Love`;
+    let buttonLoveText = `${this.props.loveCount}`;
     let buttonLoveClass = "button";
     if (this.state.showLove) buttonLoveClass = "button is-warning";
 
-    let buttonIgnoreText = `${this.props.ignoreCount} Ignored`;
+    let buttonIgnoreText = `${this.props.ignoreCount}`;
     let buttonIgnoreClass = "button";
     if (this.state.showIgnore) buttonIgnoreClass = "button is-warning";
 
@@ -542,33 +573,43 @@ class PostsCollection extends React.Component {
         <nav className="level navbar is-fixed-top">
           <div className="level-item">
             <a className="button" onClick={this.props.clearPath}>
-              Home
+              <span className="icon">
+                <img src="/web/img/home.svg" alt="Home" />
+              </span>
             </a>
             <a
               ref={i => (this.buttonNormal = i)}
               className={buttonNormalClass}
               onClick={this.showNormal}
             >
-              {buttonNormalText}
+              <span className="icon">
+                <img src="/web/img/images.svg" alt="Images" />
+              </span>
+              <span>{buttonNormalText}</span>
             </a>
             <a
               ref={i => (this.buttonLove = i)}
               className={buttonLoveClass}
               onClick={this.toggleShowLove}
             >
-              {buttonLoveText}
+              <span className="icon">
+                <img src="/web/img/heart.svg" alt="Love" />
+              </span>
+              <span>{buttonLoveText}</span>
             </a>
             <a
               ref={i => (this.buttonIgnore = i)}
               className={buttonIgnoreClass}
               onClick={this.toggleShowIgnore}
             >
-              {buttonIgnoreText}
+              <span className="icon">
+                <img src="/web/img/ban.svg" alt="Ignore" />
+              </span>
+              <span>{buttonIgnoreText}</span>
             </a>
           </div>
         </nav>
         <div className="container">
-          <br />
           <div>{posts}</div>
         </div>
       </section>

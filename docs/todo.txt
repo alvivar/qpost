@@ -16,9 +16,11 @@
     x Ignore only show ignore
 
     2018/03/25 05:04 pm
+    x Icons on all buttons
+    x Buttons to the top right next to the image
+    x Loved images should be noticeable
     x React code in his own file
 
-    Loved images should be noticeable
     Delete button on ignores images
     Delete real images
     Extract love ones
@@ -28,7 +30,6 @@
     Webm support
 
     Sort by rank by clicking
-    Buttons to the top right next to the image
     Go back to one data stream, instead of separating ignored
 
     Tag by folder
@@ -40,7 +41,7 @@
     Show feedback when the files are being saved
     Drag and drop to detect path
 
-    bug Last image card, when ignored the scrollbar stays there
+    bug Last image card in line, when ignored/unloved the scrollbar stays there
 
 
     2018/03/06 04:06 am
