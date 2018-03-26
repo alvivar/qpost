@@ -182,6 +182,7 @@ class PostsCollection extends React.Component {
     this.toggleShowLove = this.toggleShowLove.bind(this);
     this.toggleShowIgnore = this.toggleShowIgnore.bind(this);
     this.showNormal = this.showNormal.bind(this);
+    this.deleteIgnoreFiles = this.deleteIgnoreFiles.bind(this);
     this.handleKeyboard = this.handleKeyboard.bind(this);
   }
 
@@ -452,6 +453,19 @@ class PostsCollection extends React.Component {
     );
   }
 
+  deleteIgnoreFiles() {
+    this.buttonIgnore.classList.toggle("is-loading");
+    this.buttonDelete.classList.toggle("is-loading");
+
+    setTimeout(
+      function() {
+        this.props.deleteIgnoreFiles();
+        this.showNormal();
+      }.bind(this),
+      10
+    );
+  }
+
   render() {
     // Data filtering
     let chosenData = [];
@@ -467,7 +481,7 @@ class PostsCollection extends React.Component {
     // Entry generation
     let posts = chosenData.map(data => {
       let buttonLoveClass = "button card-footer-item";
-      if (data.love) buttonLoveClass = "button is-danger card-footer-item";
+      if (data.love) buttonLoveClass = "button is-info card-footer-item";
 
       return (
         <div>
@@ -491,7 +505,6 @@ class PostsCollection extends React.Component {
                   src="/web/img/heart.svg"
                   alt="Love"
                   style={{
-                    margin: "10px",
                     maxWidth: "20px",
                     maxHeight: "20px"
                   }}
@@ -505,7 +518,6 @@ class PostsCollection extends React.Component {
                   src="/web/img/caret-up.svg"
                   alt="Up"
                   style={{
-                    margin: "10px",
                     maxWidth: "25px",
                     maxHeight: "25px"
                   }}
@@ -519,7 +531,6 @@ class PostsCollection extends React.Component {
                   src="/web/img/caret-down.svg"
                   alt="Down"
                   style={{
-                    margin: "10px",
                     maxWidth: "25px",
                     maxHeight: "25px"
                   }}
@@ -533,7 +544,6 @@ class PostsCollection extends React.Component {
                   src="/web/img/ban.svg"
                   alt="Ignore"
                   style={{
-                    margin: "10px",
                     maxWidth: "20px",
                     maxHeight: "20px"
                   }}
@@ -607,6 +617,17 @@ class PostsCollection extends React.Component {
               </span>
               <span>{buttonIgnoreText}</span>
             </a>
+            {this.state.showIgnore && this.props.ignoreCount > 0 ? (
+              <a
+                ref={i => (this.buttonDelete = i)}
+                className="button is-danger"
+                onClick={this.deleteIgnoreFiles}
+              >
+                <span className="icon">
+                  <img src="/web/img/trash-alt.svg" alt="Delete" />
+                </span>
+              </a>
+            ) : null}
           </div>
         </nav>
         <div className="container">
@@ -788,6 +809,16 @@ class Main extends React.Component {
     await eel.saveqbotfile(this.state.path)();
   }
 
+  async deleteIgnoreFiles() {
+    let data = [...this.data, ...this.ignoreData];
+
+    let toDelete = data.filter(i => i.ignore).map(i => i.file);
+    await eel.deleteFiles(toDelete)();
+
+    let newData = data.filter(i => !i.ignore);
+    this.updateData(newData);
+  }
+
   renderPathInput() {
     return (
       <PathInput
@@ -810,6 +841,7 @@ class Main extends React.Component {
         loveCount={this.state.loveCount}
         ignoreCount={this.state.ignoreCount}
         updateData={this.updateData}
+        deleteIgnoreFiles={this.deleteIgnoreFiles}
         clearPath={this.clearPathOnClick}
       />
     );

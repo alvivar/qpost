@@ -126,6 +126,9 @@ def savepathfile(path, data, dirs=['eeldata', 'files']):
 
 @eel.expose
 def loadpathfile(path, dirs=['eeldata', 'files']):
+    """
+        Return the data from the json file related to the 'path'.
+    """
 
     filepath = os.path.join(HOME, *dirs)
     name = hashlib.md5(flatname(path).encode('utf-8')).hexdigest()
@@ -143,7 +146,7 @@ def loadpathfile(path, dirs=['eeldata', 'files']):
 @eel.expose
 def saveqbotfile(path):
     """
-        Updates a Qbot file on the same path that contains the images and text
+        Update a Qbot file on the same path that contains the images and text
         in the correct order and ready to be tweeted.
     """
 
@@ -165,7 +168,7 @@ def saveqbotfile(path):
 @eel.expose
 def saveconfigfile(data, dirs=['eeldata', 'config']):
     """
-        Updates the configuration json file.
+        Save the data into the json file.
     """
 
     filepath = os.path.join(HOME, *dirs)
@@ -181,7 +184,7 @@ def saveconfigfile(data, dirs=['eeldata', 'config']):
 @eel.expose
 def loadconfigfile(dirs=['eeldata', 'config']):
     """
-        Updates the configuration json file.
+        Return the data from the json file.
     """
 
     filepath = os.path.join(HOME, *dirs)
@@ -196,4 +199,14 @@ def loadconfigfile(dirs=['eeldata', 'config']):
     return data
 
 
-eel.start('app.html', size=(500, 700))
+@eel.expose
+def deleteFiles(files):
+    """
+        Delete the files.
+    """
+    for f in files:
+        if os.path.isfile(f):
+            os.remove(f)
+
+
+eel.start('app.html', size=(600, 10000))

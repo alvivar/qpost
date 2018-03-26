@@ -2,8 +2,8 @@
         TO DO
 
 
-    Delete button on ignored images
-    Delete real images
+    Button shorcuts for each part
+
     Extract love ones
     Rename images by order
 
@@ -25,6 +25,14 @@
     bug Last image card in line, when ignored/unloved the scrollbar stays there
 
 
+    2018/03/25 05:04 pm
+    x Delete real images
+    x Delete button on ignored images
+    x Icons on all buttons
+    x Buttons to the top right next to the image
+    x Loved images should be noticeable
+    x React code in his own file
+
     2018/03/13 08:05 pm
     x App files to their own folder inside eeldata
     x Random image when 'r' is pressed
@@ -37,12 +45,6 @@
     x Detect scrollbar event
     x Love only show love
     x Ignore only show ignore
-
-    2018/03/25 05:04 pm
-    x Icons on all buttons
-    x Buttons to the top right next to the image
-    x Loved images should be noticeable
-    x React code in his own file
 
     2018/03/06 04:06 am
     x Show normal waiting feedback
