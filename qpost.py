@@ -107,7 +107,7 @@ def copytree(source, filesfilter=['*'], dirs=['eeldata', 'cache']):
 
 
 @eel.expose
-def savepathfile(path, data, dirs=['eeldata', 'files']):
+def savepathfile(path, data, dirs=['eeldata', 'config']):
     """
         Create a json file with a unique name based on the 'path' that will
         contain the 'data'.
@@ -125,7 +125,7 @@ def savepathfile(path, data, dirs=['eeldata', 'files']):
 
 
 @eel.expose
-def loadpathfile(path, dirs=['eeldata', 'files']):
+def loadpathfile(path, dirs=['eeldata', 'config']):
     """
         Return the data from the json file related to the 'path'.
     """
@@ -175,7 +175,7 @@ def saveconfigfile(data, dirs=['eeldata', 'config']):
     if not os.path.exists(filepath):
         os.makedirs(filepath)
 
-    filename = os.path.join(filepath, 'config.json')
+    filename = os.path.join(filepath, 'app.json')
 
     with open(filename, 'w') as f:
         json.dump(data, f)
@@ -188,7 +188,7 @@ def loadconfigfile(dirs=['eeldata', 'config']):
     """
 
     filepath = os.path.join(HOME, *dirs)
-    filename = os.path.join(filepath, 'config.json')
+    filename = os.path.join(filepath, 'app.json')
 
     try:
         with open(filename, 'r') as f:
