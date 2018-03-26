@@ -26,6 +26,7 @@
 
 
     2018/03/25 05:04 pm
+    x Better path names for files
     x Delete real images
     x Delete button on ignored images
     x Icons on all buttons
