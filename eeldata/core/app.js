@@ -35,7 +35,7 @@ class PathInput extends React.Component {
       buttonClass = "button is-danger";
       buttonText = this.props.error;
     } else if (this.props.waiting) {
-      buttonClass = "button is-info is-loading";
+      buttonClass = "button is-warning is-loading";
     }
 
     return (
@@ -617,7 +617,7 @@ class PostsCollection extends React.Component {
               </span>
               <span>{buttonIgnoreText}</span>
             </a>
-            {this.state.showIgnore && this.props.ignoreCount > 0 ? (
+            {this.state.showIgnore ? (
               <a
                 ref={i => (this.buttonDelete = i)}
                 className="button is-danger"

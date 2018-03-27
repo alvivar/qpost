@@ -2,8 +2,11 @@
         TO DO
 
 
-    On file load, verify existence, clean
-    Trash button sometime dissapear, make it dissapear when pressed
+    2018/03/27 05:49 pm
+    x Trash button sometime dissapear
+
+
+    On file load, verify existence, clean missing files
     Button shorcuts for each main part
     Shortcut to go back to the last
     Add current images to the same random list to ignore them
