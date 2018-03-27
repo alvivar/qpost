@@ -2,7 +2,8 @@
         TO DO
 
 
-    Trash button sometime dissapear, make it stable
+    On file load, verify existence, clean
+    Trash button sometime dissapear, make it dissapear when pressed
     Button shorcuts for each main part
     Shortcut to go back to the last
     Add current images to the same random list to ignore them
