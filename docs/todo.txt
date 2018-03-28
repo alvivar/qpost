@@ -9,13 +9,14 @@
     x Trash button sometime dissapear
 
 
-    Button shorcuts for each main part
-    Shortcut to go back to the last
+    Deactivate shorcuts while editing
+
     Add current images to the same random list to ignore them
+    Shortcut to go back to the last image
+    Button shorcuts for each main part
 
     Extract love ones
     Rename images by order
-
     Image width auto adjust to fit screen
     Webm support
 
