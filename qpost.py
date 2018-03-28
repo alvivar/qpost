@@ -139,8 +139,9 @@ def loadpathfile(path, dirs=['eeldata', 'config']):
             data = json.load(f)
     except (IOError, ValueError):
         data = []
+    cleaned = [i for i in data if os.path.isfile(i['file'])]
 
-    return data
+    return cleaned
 
 
 @eel.expose
