@@ -127,7 +127,8 @@ def savepathfile(path, data, dirs=['eeldata', 'config']):
 @eel.expose
 def loadpathfile(path, dirs=['eeldata', 'config']):
     """
-        Return the data from the json file related to the 'path'.
+        Return the data from the json file related to the 'path', cleaning
+        files that doesn't exist.
     """
 
     filepath = os.path.join(HOME, *dirs)
