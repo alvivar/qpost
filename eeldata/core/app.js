@@ -106,7 +106,7 @@ class Post extends React.Component {
   saveData() {
     let id = this.props.id;
     let value = this.state.value;
-    let newData = [...this.props.data, ...this.props.ignoreData].map(i => {
+    let newData = [...this.props.data].map(i => {
       if (i.id === id) i.text = value;
       return i;
     });
@@ -298,7 +298,7 @@ class PostsCollection extends React.Component {
     window.scrollTo(0, e.target.parentElement.parentElement.offsetTop);
 
     // Find
-    let allData = [...this.props.data, ...this.props.ignoreData];
+    let allData = [...this.props.data];
     let idIndex = allData.findIndex(i => i.id === id);
 
     // Love is a special case
@@ -331,7 +331,7 @@ class PostsCollection extends React.Component {
     window.scrollTo(0, e.target.parentElement.parentElement.offsetTop);
 
     // Find
-    let allData = [...this.props.data, ...this.props.ignoreData];
+    let allData = [...this.props.data];
     let idIndex = allData.findIndex(i => i.id === id);
 
     // Love is a special case
@@ -365,7 +365,7 @@ class PostsCollection extends React.Component {
       : e.target.parentElement.parentElement.offsetTop;
 
     // Toggle love
-    let allData = [...this.props.data, ...this.props.ignoreData];
+    let allData = [...this.props.data];
     let newData = allData.map(i => {
       if (i.id === id) {
         i.love = !i.love;
@@ -387,7 +387,7 @@ class PostsCollection extends React.Component {
     window.scrollTo(0, scrollOffset);
 
     // Toggle ignore
-    let allData = [...this.props.data, ...this.props.ignoreData];
+    let allData = [...this.props.data];
     let newData = allData.map(i => {
       if (i.id === id) i.ignore = !i.ignore;
       return i;
@@ -469,14 +469,13 @@ class PostsCollection extends React.Component {
   render() {
     // Data filtering
     let chosenData = [];
-    if (this.state.showIgnore) chosenData = this.props.ignoreData;
-    else {
-      if (this.state.showLove)
-        chosenData = [...this.props.data, ...this.props.ignoreData];
-      else chosenData = this.props.data;
+    if (this.state.showLove) {
+      chosenData = this.props.data.filter(i => i.love);
+    } else if (this.state.showIgnore) {
+      chosenData = this.props.data.filter(i => i.ignore);
+    } else {
+      chosenData = this.props.data.filter(i => !i.ignore);
     }
-
-    if (this.state.showLove) chosenData = chosenData.filter(i => i.love);
 
     // Entry generation
     let posts = chosenData.map(data => {
@@ -556,7 +555,6 @@ class PostsCollection extends React.Component {
               id={data.id}
               value={data.text}
               data={this.props.data}
-              ignoreData={this.props.ignoreData}
               updateData={this.props.updateData}
             />
           </div>
@@ -649,7 +647,6 @@ class Main extends React.Component {
       recentPaths: [],
       path: "",
       data: [],
-      ignoreData: [],
       dataCount: 0,
       loveCount: 0,
       ignoreCount: 0
@@ -659,6 +656,7 @@ class Main extends React.Component {
     this.scanPathOnClick = this.scanPathOnClick.bind(this);
     this.clearPathOnClick = this.clearPathOnClick.bind(this);
     this.updateData = this.updateData.bind(this);
+    this.deleteIgnoreFiles = this.deleteIgnoreFiles.bind(this);
   }
 
   async componentWillMount() {
@@ -751,14 +749,13 @@ class Main extends React.Component {
         if (i.ignore) ignoreData.push(i);
         else normalData.push(i);
       });
-      let loveData = [...normalData, ...ignoreData].filter(i => i.love);
+      let loveData = pathData.filter(i => i.love);
 
       this.setState({
         hasPath: true,
         hasError: false,
         isWaiting: false,
-        data: normalData,
-        ignoreData: ignoreData,
+        data: pathData,
         dataCount: normalData.length,
         loveCount: loveData.length,
         ignoreCount: ignoreData.length
@@ -794,28 +791,25 @@ class Main extends React.Component {
       if (i.ignore) ignoreData.push(i);
       else normalData.push(i);
     });
-    let loveData = [...normalData, ...ignoreData].filter(i => i.love);
+    let loveData = newData.filter(i => i.love);
 
     this.setState({
-      data: normalData,
-      ignoreData: ignoreData,
+      data: newData,
       dataCount: normalData.length,
       loveCount: loveData.length,
       ignoreCount: ignoreData.length
     });
 
     // Files
-    await eel.savepathfile(this.state.path, [...normalData, ...ignoreData])();
+    await eel.savepathfile(this.state.path, newData)();
     await eel.saveqbotfile(this.state.path)();
   }
 
   async deleteIgnoreFiles() {
-    let data = [...this.data, ...this.ignoreData];
-
-    let toDelete = data.filter(i => i.ignore).map(i => i.file);
+    let toDelete = this.state.data.filter(i => i.ignore).map(i => i.file);
     await eel.deleteFiles(toDelete)();
 
-    let newData = data.filter(i => !i.ignore);
+    let newData = this.state.data.filter(i => !i.ignore);
     this.updateData(newData);
   }
 
@@ -836,7 +830,6 @@ class Main extends React.Component {
     return (
       <PostsCollection
         data={this.state.data}
-        ignoreData={this.state.ignoreData}
         dataCount={this.state.dataCount}
         loveCount={this.state.loveCount}
         ignoreCount={this.state.ignoreCount}

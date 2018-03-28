@@ -3,6 +3,8 @@
 
 
     2018/03/27 05:49 pm
+    x Fix delete files
+    x Go back to one data stream, instead of separating ignored
     x On file load, verify existence, clean missing files
     x Trash button sometime dissapear
 
@@ -18,7 +20,6 @@
     Webm support
 
     Sort by rank by clicking
-    Go back to one data stream, instead of separating ignored
 
     Tag by folder
     Tag by image
