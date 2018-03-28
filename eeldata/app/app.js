@@ -56,7 +56,7 @@ class PathInput extends React.Component {
                 />
                 <a className={buttonClass} onClick={this.props.scanPath}>
                   <span className="icon">
-                    <img src="/core/img/search.svg" alt="Scan" />
+                    <img src="/app/img/search.svg" alt="Scan" />
                   </span>
                   {buttonText ? <span>{buttonText}</span> : null}
                 </a>
@@ -501,7 +501,7 @@ class PostsCollection extends React.Component {
                 className={buttonLoveClass}
               >
                 <img
-                  src="/core/img/heart.svg"
+                  src="/app/img/heart.svg"
                   alt="Love"
                   style={{
                     maxWidth: "20px",
@@ -514,7 +514,7 @@ class PostsCollection extends React.Component {
                 className="button card-footer-item"
               >
                 <img
-                  src="/core/img/caret-up.svg"
+                  src="/app/img/caret-up.svg"
                   alt="Up"
                   style={{
                     maxWidth: "25px",
@@ -527,7 +527,7 @@ class PostsCollection extends React.Component {
                 className="button card-footer-item"
               >
                 <img
-                  src="/core/img/caret-down.svg"
+                  src="/app/img/caret-down.svg"
                   alt="Down"
                   style={{
                     maxWidth: "25px",
@@ -540,7 +540,7 @@ class PostsCollection extends React.Component {
                 className="button card-footer-item"
               >
                 <img
-                  src="/core/img/ban.svg"
+                  src="/app/img/ban.svg"
                   alt="Ignore"
                   style={{
                     maxWidth: "20px",
@@ -582,7 +582,7 @@ class PostsCollection extends React.Component {
           <div className="level-item">
             <a className="button" onClick={this.props.clearPath}>
               <span className="icon">
-                <img src="/core/img/home.svg" alt="Home" />
+                <img src="/app/img/home.svg" alt="Home" />
               </span>
             </a>
             <a
@@ -591,7 +591,7 @@ class PostsCollection extends React.Component {
               onClick={this.showNormal}
             >
               <span className="icon">
-                <img src="/core/img/images.svg" alt="Images" />
+                <img src="/app/img/images.svg" alt="Images" />
               </span>
               <span>{buttonNormalText}</span>
             </a>
@@ -601,7 +601,7 @@ class PostsCollection extends React.Component {
               onClick={this.toggleShowLove}
             >
               <span className="icon">
-                <img src="/core/img/heart.svg" alt="Love" />
+                <img src="/app/img/heart.svg" alt="Love" />
               </span>
               <span>{buttonLoveText}</span>
             </a>
@@ -611,7 +611,7 @@ class PostsCollection extends React.Component {
               onClick={this.toggleShowIgnore}
             >
               <span className="icon">
-                <img src="/core/img/ban.svg" alt="Ignore" />
+                <img src="/app/img/ban.svg" alt="Ignore" />
               </span>
               <span>{buttonIgnoreText}</span>
             </a>
@@ -622,7 +622,7 @@ class PostsCollection extends React.Component {
                 onClick={this.deleteIgnoreFiles}
               >
                 <span className="icon">
-                  <img src="/core/img/trash-alt.svg" alt="Delete" />
+                  <img src="/app/img/trash-alt.svg" alt="Delete" />
                 </span>
               </a>
             ) : null}
