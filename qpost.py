@@ -211,4 +211,4 @@ def deleteFiles(files):
             os.remove(f)
 
 
-eel.start('app.html', size=(600, 10000))
+eel.start('app.html', size=(555, 10000))
