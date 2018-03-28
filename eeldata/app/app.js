@@ -211,12 +211,17 @@ class PostsCollection extends React.Component {
     // Sort by closest to the scroll
     let scrollTop = document.documentElement.scrollTop;
     let cardsVisible = this.filterVisible(cards);
-    cardsVisible.sort((a, b) => {
-      return (
+    cardsVisible.sort(
+      (a, b) =>
         Math.abs(scrollTop - a.offsetTop) - Math.abs(scrollTop - b.offsetTop)
-      );
-    });
+    );
+
     let currentCard = cardsVisible[0];
+    let currentIndex = cards.indexOf(currentCard);
+
+    // Current cards will be ignored when jumpting to a random image
+    if (this.lastRandomCards.indexOf(currentIndex) === -1)
+      this.lastRandomCards.push(currentIndex);
 
     if (e.keyCode === 78) {
       // 'n' goes to a random image card
@@ -232,13 +237,11 @@ class PostsCollection extends React.Component {
       window.scrollTo(0, cards[random].offsetTop);
     } else if (e.keyCode === 74) {
       // 'j' goes to the next image
-      let currentIndex = cards.indexOf(currentCard);
       let nextCard = cards[currentIndex + 1];
       if (nextCard !== void 0) window.scrollTo(0, nextCard.offsetTop);
       else window.scrollTo(0, currentCard.offsetTop);
     } else if (e.keyCode === 75) {
       // 'k' goes to the previous image
-      let currentIndex = cards.indexOf(currentCard);
       let nextCard = cards[currentIndex - 1];
       if (nextCard !== void 0) window.scrollTo(0, nextCard.offsetTop);
       else window.scrollTo(0, currentCard.offsetTop);
@@ -301,29 +304,27 @@ class PostsCollection extends React.Component {
     let allData = [...this.props.data];
     let idIndex = allData.findIndex(i => i.id === id);
 
-    // Love is a special case
+    // Images on the current list
+    let ids = [];
     if (this.state.showLove) {
-      let ids = this.getBrothersIds(id, allData.filter(i => i.love));
-      if (ids.up) {
-        // Extract
-        let value = allData[idIndex];
-        allData.splice(idIndex, 1); // Remove
-
-        // Insert
-        let upIndex = allData.findIndex(i => i.id === ids.up);
-        allData.splice(upIndex, 0, value);
-      }
-
-      return this.props.updateData(allData);
+      ids = this.getBrothersIds(id, allData.filter(i => i.love));
+    } else if (this.state.showIgnore) {
+      ids = this.getBrothersIds(id, allData.filter(i => i.ignore));
+    } else {
+      ids = this.getBrothersIds(id, allData.filter(i => !i.ignore));
     }
 
-    // Move
-    let value = allData[idIndex];
-    allData.splice(idIndex, 1); // Remove
-    idIndex = idIndex > 0 ? idIndex - 1 : 0; // Up
-    allData.splice(idIndex, 0, value); // Insert
+    if (ids.up) {
+      // Extract
+      let value = allData[idIndex];
+      allData.splice(idIndex, 1); // Remove
 
-    this.props.updateData(allData);
+      // Insert
+      let upIndex = allData.findIndex(i => i.id === ids.up);
+      allData.splice(upIndex, 0, value);
+    }
+
+    return this.props.updateData(allData);
   }
 
   moveDown(id, e) {
@@ -334,29 +335,27 @@ class PostsCollection extends React.Component {
     let allData = [...this.props.data];
     let idIndex = allData.findIndex(i => i.id === id);
 
-    // Love is a special case
+    // Images on the current list
+    let ids = [];
     if (this.state.showLove) {
-      let ids = this.getBrothersIds(id, allData.filter(i => i.love));
-      if (ids.down) {
-        // Extract
-        let value = allData[idIndex];
-        allData.splice(idIndex, 1); // Remove
-
-        // Insert
-        let upIndex = allData.findIndex(i => i.id === ids.down);
-        allData.splice(upIndex + 1, 0, value);
-      }
-
-      return this.props.updateData(allData);
+      ids = this.getBrothersIds(id, allData.filter(i => i.love));
+    } else if (this.state.showIgnore) {
+      ids = this.getBrothersIds(id, allData.filter(i => i.ignore));
+    } else {
+      ids = this.getBrothersIds(id, allData.filter(i => !i.ignore));
     }
 
-    // Move
-    let value = allData[idIndex];
-    allData.splice(idIndex, 1); // Remove
-    idIndex = idIndex + 1; // Down
-    allData.splice(idIndex, 0, value); // Insert
+    if (ids.down) {
+      // Extract
+      let value = allData[idIndex];
+      allData.splice(idIndex, 1); // Remove
 
-    this.props.updateData(allData);
+      // Insert
+      let upIndex = allData.findIndex(i => i.id === ids.down);
+      allData.splice(upIndex + 1, 0, value);
+    }
+
+    return this.props.updateData(allData);
   }
 
   toggleLove(id, e, offsetTop = false) {
