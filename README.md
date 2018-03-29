@@ -1,3 +1,5 @@
 # Qpost
 
-Python Eel application that creates [Qbot](https://github.com/alvivar/qbot) json files
+Photo/gif gallery that will _soon_ queue tweets to be published later!
+
+**_Work in progress_**
