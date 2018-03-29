@@ -2,20 +2,14 @@
         TO DO
 
 
-    2018/03/27 05:49 pm
-    x Fix moving ignore images up
-    x Add current images to the same random list to ignore them
-    x Fix delete files
-    x Go back to one data stream, instead of separating ignored
-    x On file load, verify existence, clean missing files
-    x Trash button sometime dissapear
-
     Deactivate shorcuts while editing
 
     Extract love ones
+    Unify loved ones, same file, loved everywhere
+
+    Image width auto adjust to fit screen
     Sort by rank by clicking
     Rename images by order
-    Image width auto adjust to fit screen
     Webm support
 
     Shortcut to go back to the last image
@@ -32,6 +26,14 @@
 
     bug Last image card in line, when ignored/unloved the scrollbar stays there
 
+
+    2018/03/27 05:49 pm
+    x Fix moving ignore images up
+    x Add current images to the same random list to ignore them
+    x Fix delete files
+    x Go back to one data stream, instead of separating ignored
+    x On file load, verify existence, clean missing files
+    x Trash button sometime dissapear
 
     2018/03/25 05:04 pm
     x Better path names for files
