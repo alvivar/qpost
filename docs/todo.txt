@@ -43,7 +43,7 @@
     x React code in his own file
 
     2018/03/13 08:05 pm
-    x App files to their own folder inside eeldata
+    x App files to their own folder inside eelapp
     x Random image when 'r' is pressed
     x Detect current image
     x 'j' Next image

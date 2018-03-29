@@ -223,6 +223,9 @@ class PostsCollection extends React.Component {
     if (this.lastRandomCards.indexOf(currentIndex) === -1)
       this.lastRandomCards.push(currentIndex);
 
+    while (this.lastRandomCards.length > count / 5 * 4)
+      this.lastRandomCards.splice(0, 1);
+
     if (e.keyCode === 78) {
       // 'n' goes to a random image card
 
@@ -693,7 +696,7 @@ class Main extends React.Component {
       let scannedData = localFiles.map(async (i, index) => ({
         id: await eel.flatname(i, true)(),
         file: files[index],
-        appFile: i.split("\\eeldata").pop(), // Path relative to Eel app
+        appFile: i.split("\\eelapp").pop(), // Path relative to Eel app
         text: "",
         love: false,
         ignore: false
