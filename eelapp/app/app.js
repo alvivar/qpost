@@ -706,16 +706,17 @@ class Main extends React.Component {
         promisedData => (scannedData = promisedData)
       );
 
-      // The difference between the scan and the saved data is the new data
-      let oldData = [];
-      let newData = [];
-      scannedData.forEach(i => {
-        let iSaved = savedData.filter(j => j.id === i.id);
-        if (iSaved.length > 0) oldData.push(iSaved[0]);
-        else newData.push(i);
-      });
+      // Extract the unique files from the saved + the scanned
+      let filesKnown = [];
+      let mergeData = savedData.concat(scannedData).reduce((list, i) => {
+        if (filesKnown.indexOf(i.file) === -1) {
+          filesKnown.push(i.file);
+          list.push(i);
+        }
+        return list;
+      }, []);
 
-      return savedData.concat(newData);
+      return mergeData;
     }
   }
 
@@ -745,12 +746,8 @@ class Main extends React.Component {
       })();
 
       // Divide them
-      let normalData = [];
-      let ignoreData = [];
-      pathData.forEach(i => {
-        if (i.ignore) ignoreData.push(i);
-        else normalData.push(i);
-      });
+      let normalData = pathData.filter(i => !i.ignore);
+      let ignoreData = pathData.filter(i => i.ignore);
       let loveData = pathData.filter(i => i.love);
 
       this.setState({
@@ -774,7 +771,7 @@ class Main extends React.Component {
         function() {
           this.setState({ hasError: false });
         }.bind(this),
-        2000
+        1500
       );
     }
   }
@@ -787,12 +784,8 @@ class Main extends React.Component {
 
   async updateData(newData) {
     // Divide
-    let normalData = [];
-    let ignoreData = [];
-    newData.forEach(i => {
-      if (i.ignore) ignoreData.push(i);
-      else normalData.push(i);
-    });
+    let normalData = newData.filter(i => !i.ignore);
+    let ignoreData = newData.filter(i => i.ignore);
     let loveData = newData.filter(i => i.love);
 
     this.setState({

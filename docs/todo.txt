@@ -1,7 +1,7 @@
 
         TO DO
 
-
+    Dashboard thumbnails
     Deactivate shorcuts while editing
 
     Extract love ones
@@ -26,6 +26,8 @@
 
     bug Last image card in line, when ignored/unloved the scrollbar stays there
 
+    2018/04/01 07:16 pm
+    x Fix when repeated image with different itself
 
     2018/03/27 05:49 pm
     x Fix moving ignore images up
