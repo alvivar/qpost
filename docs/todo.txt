@@ -1,13 +1,15 @@
 
         TO DO
 
+    2018/05/06 06:32 pm
+    x Image width auto adjust to fit screen
+    x Deactivate shorcuts while editing the description
+
     Dashboard thumbnails
-    Deactivate shorcuts while editing
 
     Extract love ones
     Unify loved ones, same file, loved everywhere
 
-    Image width auto adjust to fit screen
     Sort by rank by clicking
     Rename images by order
     Webm support
@@ -21,6 +23,7 @@
 
     Delete a recent path entry
     A recent entry that doesn't exists (404) should be removed?
+    Repeated entries should be removed
     Show feedback when the files are being saved
     Drag and drop to detect path
 

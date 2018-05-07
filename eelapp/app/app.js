@@ -156,8 +156,10 @@ class Post extends React.Component {
 
   render() {
     if (!this.state.editMode) {
+      this.props.setIgnoreShortcuts(false);
       return this.renderShow();
     } else {
+      this.props.setIgnoreShortcuts(true);
       return this.renderEdit();
     }
   }
@@ -174,6 +176,7 @@ class PostsCollection extends React.Component {
 
     this.cardsRef = [];
     this.lastRandomCards = [];
+    this.ignoreShortcuts = false;
 
     this.moveUp = this.moveUp.bind(this);
     this.moveDown = this.moveDown.bind(this);
@@ -183,6 +186,7 @@ class PostsCollection extends React.Component {
     this.toggleShowIgnore = this.toggleShowIgnore.bind(this);
     this.showNormal = this.showNormal.bind(this);
     this.deleteIgnoreFiles = this.deleteIgnoreFiles.bind(this);
+    this.setIgnoreShortcuts = this.setIgnoreShortcuts.bind(this);
     this.handleKeyboard = this.handleKeyboard.bind(this);
   }
 
@@ -199,11 +203,37 @@ class PostsCollection extends React.Component {
     document.removeEventListener("keydown", this.handleKeyboard);
   }
 
+  setIgnoreShortcuts(value) {
+    if (this.ignoreShortcuts != value) this.ignoreShortcuts = value;
+  }
+
   randomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
+  autoWidthToView(el, step = 8, padding = 32) {
+    if (!this.isInsideView(el)) return;
+
+    step = step <= 0 ? 1 : step;
+    let width = el.offsetWidth;
+
+    while (!this.isInsideView(el, false)) {
+      width -= step;
+      el.style.width = width + "px";
+    }
+
+    while (this.isInsideView(el, false)) {
+      width += step;
+      el.style.width = width + "px";
+    }
+
+    width -= padding;
+    el.style.width = width + "px";
+  }
+
   handleKeyboard(e) {
+    if (this.ignoreShortcuts) return;
+
     let cards = this.cardsRef.filter(i => i !== null);
     let count = cards.length;
     if (count < 1) return;
@@ -238,16 +268,24 @@ class PostsCollection extends React.Component {
         this.lastRandomCards.splice(0, 1);
 
       window.scrollTo(0, cards[random].offsetTop);
+
+      this.autoWidthToView(cards[random]);
     } else if (e.keyCode === 74) {
       // 'j' goes to the next image
       let nextCard = cards[currentIndex + 1];
+
       if (nextCard !== void 0) window.scrollTo(0, nextCard.offsetTop);
       else window.scrollTo(0, currentCard.offsetTop);
+
+      this.autoWidthToView(nextCard);
     } else if (e.keyCode === 75) {
       // 'k' goes to the previous image
       let nextCard = cards[currentIndex - 1];
+
       if (nextCard !== void 0) window.scrollTo(0, nextCard.offsetTop);
       else window.scrollTo(0, currentCard.offsetTop);
+
+      this.autoWidthToView(nextCard);
     } else if (e.keyCode === 76) {
       // 'l' love toggle the image
       this.toggleLove(currentCard.id, null, currentCard.offsetTop);
@@ -257,15 +295,21 @@ class PostsCollection extends React.Component {
     }
   }
 
-  isScrolledIntoView(el) {
+  isInsideView(el, partially = true) {
     let rect = el.getBoundingClientRect();
     let elemTop = rect.top;
     let elemBottom = rect.bottom;
+    let elemRight = rect.right;
 
     // Only completely visible elements return true:
-    let isVisible = elemTop >= 0 && elemBottom <= window.innerHeight;
+    let isVisible =
+      elemTop >= 0 &&
+      elemBottom <= window.innerHeight &&
+      elemRight <= window.innerWidth;
+
     // Partially visible elements return true:
-    isVisible = elemTop < window.innerHeight && elemBottom >= 0;
+    if (partially) isVisible = elemTop < window.innerHeight && elemBottom >= 0;
+
     return isVisible;
   }
 
@@ -274,7 +318,7 @@ class PostsCollection extends React.Component {
       if (i === null) return list;
 
       let index = list.indexOf(i);
-      if (!this.isScrolledIntoView(i)) {
+      if (!this.isInsideView(i)) {
         if (index !== -1) {
           list.splice(index, 1);
         }
@@ -497,7 +541,7 @@ class PostsCollection extends React.Component {
                 <img src={data.appFile} />
               </figure>
             </div>
-            <div className="column is-1">
+            <div className="column" style={{ maxWidth: "48px" }}>
               <a
                 onClick={e => this.toggleLove(data.id, e)}
                 className={buttonLoveClass}
@@ -558,6 +602,7 @@ class PostsCollection extends React.Component {
               value={data.text}
               data={this.props.data}
               updateData={this.props.updateData}
+              setIgnoreShortcuts={this.setIgnoreShortcuts}
             />
           </div>
           <hr />
