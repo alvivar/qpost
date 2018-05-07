@@ -1,10 +1,6 @@
 
         TO DO
 
-    2018/05/06 06:32 pm
-    x Image width auto adjust to fit screen
-    x Deactivate shorcuts while editing the description
-
     Dashboard thumbnails
 
     Extract love ones
@@ -28,6 +24,10 @@
     Drag and drop to detect path
 
     bug Last image card in line, when ignored/unloved the scrollbar stays there
+
+    2018/05/06 06:32 pm
+    x Image width auto adjust to fit screen
+    x Deactivate shorcuts while editing the description
 
     2018/04/01 07:16 pm
     x Fix when repeated image with different itself
