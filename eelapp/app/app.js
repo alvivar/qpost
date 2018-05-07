@@ -268,24 +268,29 @@ class PostsCollection extends React.Component {
         this.lastRandomCards.splice(0, 1);
 
       window.scrollTo(0, cards[random].offsetTop);
-
       this.autoWidthToView(cards[random]);
     } else if (e.keyCode === 74) {
       // 'j' goes to the next image
       let nextCard = cards[currentIndex + 1];
 
-      if (nextCard !== void 0) window.scrollTo(0, nextCard.offsetTop);
-      else window.scrollTo(0, currentCard.offsetTop);
-
-      this.autoWidthToView(nextCard);
+      if (nextCard !== void 0) {
+        window.scrollTo(0, nextCard.offsetTop);
+        this.autoWidthToView(nextCard);
+      } else {
+        window.scrollTo(0, currentCard.offsetTop);
+        this.autoWidthToView(currentCard);
+      }
     } else if (e.keyCode === 75) {
       // 'k' goes to the previous image
       let nextCard = cards[currentIndex - 1];
 
-      if (nextCard !== void 0) window.scrollTo(0, nextCard.offsetTop);
-      else window.scrollTo(0, currentCard.offsetTop);
-
-      this.autoWidthToView(nextCard);
+      if (nextCard !== void 0) {
+        window.scrollTo(0, nextCard.offsetTop);
+        this.autoWidthToView(nextCard);
+      } else {
+        window.scrollTo(0, currentCard.offsetTop);
+        this.autoWidthToView(currentCard);
+      }
     } else if (e.keyCode === 76) {
       // 'l' love toggle the image
       this.toggleLove(currentCard.id, null, currentCard.offsetTop);
