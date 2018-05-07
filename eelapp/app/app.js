@@ -211,7 +211,7 @@ class PostsCollection extends React.Component {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
-  autoWidthToView(el, step = 8, padding = 32) {
+  autoWidthToView(el, step = 4, padding = 44) {
     if (!this.isInsideView(el)) return;
 
     step = step <= 0 ? 1 : step;
@@ -541,7 +541,7 @@ class PostsCollection extends React.Component {
                 <img src={data.appFile} />
               </figure>
             </div>
-            <div className="column" style={{ maxWidth: "48px" }}>
+            <div className="column" style={{ maxWidth: "40px" }}>
               <a
                 onClick={e => this.toggleLove(data.id, e)}
                 className={buttonLoveClass}
