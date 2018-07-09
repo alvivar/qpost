@@ -70,7 +70,7 @@ class PathInput extends React.Component {
   }
 }
 
-class Post extends React.Component {
+class ImageDescription extends React.Component {
   constructor(props) {
     super(props);
 
@@ -165,7 +165,30 @@ class Post extends React.Component {
   }
 }
 
-class PostsCollection extends React.Component {
+class MediaFile extends React.Component {
+  render() {
+    let extension = this.props.filename.split(".").pop();
+    if (extension.toLowerCase() === "webm") {
+      return this.renderWebm();
+    } else {
+      return this.renderImage();
+    }
+  }
+
+  renderWebm() {
+    return (
+      <video controls muted src={this.props.filename}>
+        Sorry, your browser doesn't support embedded videos.
+      </video>
+    );
+  }
+
+  renderImage() {
+    return <img src={this.props.filename} />;
+  }
+}
+
+class ImageCollection extends React.Component {
   constructor(props) {
     super(props);
 
@@ -248,6 +271,7 @@ class PostsCollection extends React.Component {
 
     let currentCard = cardsVisible[0];
     let currentIndex = cards.indexOf(currentCard);
+    let nextCard = null;
 
     // Current cards will be ignored when jumpting to a random image
     if (this.lastRandomCards.indexOf(currentIndex) === -1)
@@ -267,11 +291,13 @@ class PostsCollection extends React.Component {
       while (this.lastRandomCards.length > (count / 5) * 4)
         this.lastRandomCards.splice(0, 1);
 
-      window.scrollTo(0, cards[random].offsetTop);
-      this.autoWidthToView(cards[random]);
+      nextCard = cards[random];
+
+      window.scrollTo(0, nextCard.offsetTop);
+      this.autoWidthToView(nextCard);
     } else if (e.keyCode === 74) {
       // 'j' goes to the next image
-      let nextCard = cards[currentIndex + 1];
+      nextCard = cards[currentIndex + 1];
 
       if (nextCard !== void 0) {
         window.scrollTo(0, nextCard.offsetTop);
@@ -282,7 +308,7 @@ class PostsCollection extends React.Component {
       }
     } else if (e.keyCode === 75) {
       // 'k' goes to the previous image
-      let nextCard = cards[currentIndex - 1];
+      nextCard = cards[currentIndex - 1];
 
       if (nextCard !== void 0) {
         window.scrollTo(0, nextCard.offsetTop);
@@ -297,6 +323,17 @@ class PostsCollection extends React.Component {
     } else if (e.keyCode === 73) {
       // 'i' ignore toggle the image
       this.toggleIgnore(currentCard.id, null, currentCard.offsetTop);
+    }
+
+    // Autoplay when there is a video
+    if (nextCard) {
+      let videos = nextCard.getElementsByTagName("video");
+      if (videos[0]) {
+        videos[0].pause();
+        videos[0].currentTime = 0;
+        videos[0].load();
+        videos[0].play();
+      }
     }
   }
 
@@ -543,7 +580,7 @@ class PostsCollection extends React.Component {
           >
             <div className="column">
               <figure className="image">
-                <img src={data.appFile} />
+                <MediaFile filename={data.appFile} />
               </figure>
             </div>
             <div className="column" style={{ maxWidth: "40px" }}>
@@ -602,7 +639,7 @@ class PostsCollection extends React.Component {
             </div>
           </div>
           <div className="column">
-            <Post
+            <ImageDescription
               id={data.id}
               value={data.text}
               data={this.props.data}
@@ -731,7 +768,7 @@ class Main extends React.Component {
     let savedData = await eel.loadpathfile(path)();
 
     // Scan the path for new data
-    let allow = ["*.gif", "*.jpg", "*.png"]; // Only images
+    let allow = ["*.gif", "*.jpg", "*.png", "*.bmp", "*.webm"]; // Internet media
     let files = await eel.get_files_dirs(path, allow)();
     files = files[0]; // First element from the tuple result are the files, seconds dirs
 
@@ -873,7 +910,7 @@ class Main extends React.Component {
 
   renderPosts() {
     return (
-      <PostsCollection
+      <ImageCollection
         data={this.state.data}
         dataCount={this.state.dataCount}
         loveCount={this.state.loveCount}
