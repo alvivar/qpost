@@ -188,7 +188,7 @@ class MediaFile extends React.Component {
   }
 }
 
-class ImageCollection extends React.Component {
+class MediaCollection extends React.Component {
   constructor(props) {
     super(props);
 
@@ -292,19 +292,15 @@ class ImageCollection extends React.Component {
         this.lastRandomCards.splice(0, 1);
 
       nextCard = cards[random];
-
       window.scrollTo(0, nextCard.offsetTop);
-      this.autoWidthToView(nextCard);
     } else if (e.keyCode === 74) {
       // 'j' goes to the next image
       nextCard = cards[currentIndex + 1];
 
       if (nextCard !== void 0) {
         window.scrollTo(0, nextCard.offsetTop);
-        this.autoWidthToView(nextCard);
       } else {
         window.scrollTo(0, currentCard.offsetTop);
-        this.autoWidthToView(currentCard);
       }
     } else if (e.keyCode === 75) {
       // 'k' goes to the previous image
@@ -312,10 +308,8 @@ class ImageCollection extends React.Component {
 
       if (nextCard !== void 0) {
         window.scrollTo(0, nextCard.offsetTop);
-        this.autoWidthToView(nextCard);
       } else {
         window.scrollTo(0, currentCard.offsetTop);
-        this.autoWidthToView(currentCard);
       }
     } else if (e.keyCode === 76) {
       // 'l' love toggle the image
@@ -325,13 +319,17 @@ class ImageCollection extends React.Component {
       this.toggleIgnore(currentCard.id, null, currentCard.offsetTop);
     }
 
-    // Autoplay when there is a video
+    // Tech for the chosen card
+    if (!nextCard && currentCard) nextCard = currentCard;
     if (nextCard) {
+      this.autoWidthToView(nextCard);
+
+      // Autoplay when there is a video
       let videos = nextCard.getElementsByTagName("video");
       if (videos[0]) {
         videos[0].pause();
         videos[0].currentTime = 0;
-        videos[0].load();
+        // videos[0].load();
         videos[0].play();
       }
     }
@@ -910,7 +908,7 @@ class Main extends React.Component {
 
   renderPosts() {
     return (
-      <ImageCollection
+      <MediaCollection
         data={this.state.data}
         dataCount={this.state.dataCount}
         loveCount={this.state.loveCount}
