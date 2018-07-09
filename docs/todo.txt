@@ -17,6 +17,7 @@
     Tags by folder
     Tags by image
     Tags cloud below path input
+    Auto tagging by file extension
 
     Show feedback when the files are being saved
     Drag and drop to detect path
