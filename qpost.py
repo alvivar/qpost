@@ -12,6 +12,7 @@ import os
 import shutil
 import sys
 import time
+from functools import reduce
 
 import eel
 
@@ -140,6 +141,7 @@ def loadpathfile(path, dirs=['eelapp', 'config']):
             data = json.load(f)
     except (IOError, ValueError):
         data = []
+
     cleaned = [i for i in data if os.path.isfile(i['file'])]
 
     return cleaned
@@ -156,7 +158,7 @@ def saveqbotfile(path):
 
     qbot = {'messages': []}
     for data in pathdata:
-        if not data['ignore']:
+        if not data['ignore'] and data['love']:
             qbot['messages'].append({
                 'text': data['text'],
                 'image': data['file']
@@ -197,6 +199,13 @@ def loadconfigfile(dirs=['eelapp', 'config']):
             data = json.load(f)
     except (IOError, ValueError):
         data = {'recentPaths': []}
+
+    existent_paths = [
+        i.strip('/').strip('\\') for i in data['recentPaths']
+        if os.path.exists(i)
+    ]
+    data['recentPaths'] = reduce(lambda l, i: l if i in l else l + [i],
+                                 existent_paths, [])  # Unique
 
     return data
 
