@@ -211,7 +211,7 @@ class PostsCollection extends React.Component {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
-  autoWidthToView(el, step = 4, padding = 44) {
+  autoWidthToView(el, step = 8, padding = 40) {
     if (!this.isInsideView(el)) return;
 
     step = step <= 0 ? 1 : step;
@@ -253,7 +253,7 @@ class PostsCollection extends React.Component {
     if (this.lastRandomCards.indexOf(currentIndex) === -1)
       this.lastRandomCards.push(currentIndex);
 
-    while (this.lastRandomCards.length > count / 5 * 4)
+    while (this.lastRandomCards.length > (count / 5) * 4)
       this.lastRandomCards.splice(0, 1);
 
     if (e.keyCode === 78) {
@@ -264,7 +264,7 @@ class PostsCollection extends React.Component {
         random = this.randomInt(0, count - 1);
       this.lastRandomCards.push(random);
 
-      while (this.lastRandomCards.length > count / 5 * 4)
+      while (this.lastRandomCards.length > (count / 5) * 4)
         this.lastRandomCards.splice(0, 1);
 
       window.scrollTo(0, cards[random].offsetTop);
