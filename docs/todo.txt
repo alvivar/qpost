@@ -26,6 +26,9 @@
     bug Auto size first image?
 
     2019/01/27 01:20 pm
+    x If no card, let's go to the last one
+    x JPEG support
+    x Infinite loops limits
     x MP4 support
 
     2018/07/15 01:11 am
