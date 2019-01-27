@@ -42,7 +42,7 @@ class Main extends React.Component {
 		let savedData = await eel.loadpathfile(path)();
 
 		// Scan the path for new data
-		let allow = [ '*.gif', '*.jpg', '*.png', '*.bmp', '*.webm', '*.mp4' ]; // Internet media
+		let allow = [ '*.gif', '*.jpg', '*.jpeg', '*.png', '*.bmp', '*.webm', '*.mp4' ]; // Internet media
 		let files = await eel.get_files_dirs(path, allow)();
 		files = files[0]; // First element from the tuple result are the files, seconds dirs
 
@@ -105,7 +105,7 @@ class Main extends React.Component {
 			})();
 
 			// Divide them
-			let normalData = pathData.filter((i) => !i.ignore);
+			let normalData = pathData.filter((i) => !i.ignore && !i.love);
 			let ignoreData = pathData.filter((i) => i.ignore);
 			let loveData = pathData.filter((i) => i.love);
 
@@ -143,7 +143,7 @@ class Main extends React.Component {
 
 	async updateData(newData) {
 		// Divide
-		let normalData = newData.filter((i) => !i.ignore);
+		let normalData = newData.filter((i) => !i.ignore && !i.love);
 		let ignoreData = newData.filter((i) => i.ignore);
 		let loveData = newData.filter((i) => i.love);
 
