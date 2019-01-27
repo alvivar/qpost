@@ -92,9 +92,8 @@ class MediaCollection extends React.Component {
 		let currentIndex = cards.indexOf(currentCard);
 		let nextCard = null;
 
-		// Current cards will be ignored when jumpting to a random image
+		// Current cards will be ignored when jumping to a random image
 		if (this.lastRandomCards.indexOf(currentIndex) === -1) this.lastRandomCards.push(currentIndex);
-
 		while (this.lastRandomCards.length > count / 5 * 4) this.lastRandomCards.splice(0, 1);
 
 		if (e.keyCode === 78) {
