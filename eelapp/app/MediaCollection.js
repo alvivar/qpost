@@ -45,18 +45,20 @@ class MediaCollection extends React.Component {
 		return Math.floor(Math.random() * (max - min + 1)) + min;
 	}
 
-	autoWidthToView(el, step = 8, padding = 40) {
+	autoWidthToView(el, step = 8, padding = 40, maxTries = 1024) {
 		if (!this.isInsideView(el)) return;
 
 		step = step <= 0 ? 1 : step;
 		let width = el.offsetWidth;
 
-		while (!this.isInsideView(el, false)) {
+		let loopLimit = maxTries;
+		while (loopLimit-- > 0 && !this.isInsideView(el, false)) {
 			width -= step;
 			el.style.width = width + 'px';
 		}
 
-		while (this.isInsideView(el, false)) {
+		loopLimit = maxTries;
+		while (loopLimit-- > 0 && this.isInsideView(el, false)) {
 			width += step;
 			el.style.width = width + 'px';
 		}
