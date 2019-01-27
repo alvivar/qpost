@@ -80,6 +80,15 @@ class MediaCollection extends React.Component {
 		cardsVisible.sort((a, b) => Math.abs(scrollTop - a.offsetTop) - Math.abs(scrollTop - b.offsetTop));
 
 		let currentCard = cardsVisible[0];
+
+		// If there isn't a visible card, let's go to the last one
+		if (!currentCard) {
+			let lastCard = cards[cards.length - 1];
+			window.scrollTo(0, lastCard.offsetTop);
+			this.autoWidthToView(lastCard);
+			return;
+		}
+
 		let currentIndex = cards.indexOf(currentCard);
 		let nextCard = null;
 
@@ -372,7 +381,7 @@ class MediaCollection extends React.Component {
 		} else if (this.state.showIgnore) {
 			chosenData = this.props.data.filter((i) => i.ignore);
 		} else {
-			chosenData = this.props.data.filter((i) => !i.ignore);
+			chosenData = this.props.data.filter((i) => !i.ignore && !i.love);
 		}
 
 		// Entry generation
