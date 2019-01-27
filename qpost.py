@@ -201,8 +201,7 @@ def loadconfigfile(dirs=['eelapp', 'config']):
         data = {'recentPaths': []}
 
     existent_paths = [
-        i.strip('/').strip('\\') for i in data['recentPaths']
-        if os.path.exists(i)
+        os.path.normpath(i) for i in data['recentPaths'] if os.path.exists(i)
     ]
     data['recentPaths'] = reduce(lambda l, i: l if i in l else l + [i],
                                  existent_paths, [])  # Unique
