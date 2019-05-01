@@ -143,6 +143,7 @@ def loadpathfile(path, dirs=['eelapp', 'config']):
         data = []
 
     cleaned = [i for i in data if os.path.isfile(i['file'])]
+    # cleaned = sorted(cleaned, key=lambda k: os.path.getmtime(k['file']))
 
     return cleaned
 
@@ -206,6 +207,9 @@ def loadconfigfile(dirs=['eelapp', 'config']):
     data['recentPaths'] = reduce(lambda l, i: l if i in l else l + [i],
                                  existent_paths, [])  # Unique
 
+    # data['recentPaths'] = sorted(
+    #     data['recentPaths'], key=lambda x: len(get_files_dirs(x)[0]))
+
     return data
 
 
@@ -219,4 +223,4 @@ def deleteFiles(files):
             os.remove(f)
 
 
-eel.start('app.html', size=(700, 10000))
+eel.start('app.html', size=(10000, 10000))
