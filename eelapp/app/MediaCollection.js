@@ -26,7 +26,6 @@ class MediaCollection extends React.Component {
 
     componentWillUpdate() {
         this.cardsRef = []; // New cards refs every render
-        this.lastRandomCards = [];
     }
 
     componentDidMount() {
@@ -97,8 +96,10 @@ class MediaCollection extends React.Component {
         let nextCard = null;
 
         // Current cards will be ignored when jumping to a random image
-        if (this.lastRandomCards.indexOf(currentIndex) === -1)
-            this.lastRandomCards.push(currentIndex);
+        if (this.lastRandomCards.indexOf(currentCard.id) === -1)
+            this.lastRandomCards.push(currentCard.id);
+
+        // Limit
         while (this.lastRandomCards.length > (count / 5) * 4)
             this.lastRandomCards.splice(0, 1);
 
@@ -106,17 +107,15 @@ class MediaCollection extends React.Component {
             // 'n' goes to a random image card
 
             let random = this.randomInt(0, count - 1);
-            while (this.lastRandomCards.indexOf(random) !== -1)
+            while (this.lastRandomCards.indexOf(cards[random].id) !== -1)
                 random = this.randomInt(0, count - 1);
-            this.lastRandomCards.push(random);
-
-            while (this.lastRandomCards.length > (count / 5) * 4)
-                this.lastRandomCards.splice(0, 1);
+            this.lastRandomCards.push(cards[random].id);
 
             nextCard = cards[random];
             window.scrollTo(0, nextCard.offsetTop);
         } else if (e.keyCode === 74) {
             // 'j' goes to the next image
+
             nextCard = cards[currentIndex + 1];
 
             if (nextCard !== void 0) {
@@ -126,6 +125,7 @@ class MediaCollection extends React.Component {
             }
         } else if (e.keyCode === 75) {
             // 'k' goes to the previous image
+
             nextCard = cards[currentIndex - 1];
 
             if (nextCard !== void 0) {
