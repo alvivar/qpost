@@ -8,7 +8,6 @@
     Unify ignore ones, same file, loved everywhere
 
     Dashboard thumbnails
-    Shortcut to go back to the last image
     Button shorcuts for each main part
 
     Sort by rank
@@ -24,6 +23,10 @@
 
     bug Last image card in line, when ignored/unloved the scrollbar stays there
     bug Auto size first image?
+
+    2019/05/01 06:38 pm
+    x Shortcut to go back to the last image
+    x Improved random exploration
 
     2019/01/27 01:20 pm
     x If no card, let's go to the last one
