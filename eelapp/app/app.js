@@ -170,7 +170,7 @@ class Main extends React.Component {
 
     async deleteIgnoreFiles() {
         let toDelete = this.state.data.filter(i => i.ignore).map(i => i.file);
-        await eel.deleteFiles(toDelete)();
+        await eel.deletefiles(toDelete)();
 
         let newData = this.state.data.filter(i => !i.ignore);
         this.updateData(newData);
@@ -178,7 +178,7 @@ class Main extends React.Component {
 
     async deleteNotLove() {
         let toDelete = this.state.data.filter(i => !i.love).map(i => i.file);
-        await eel.deleteFiles(toDelete)();
+        await eel.deletefiles(toDelete)();
 
         let newData = this.state.data.filter(i => i.love);
         this.updateData(newData);

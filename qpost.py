@@ -214,7 +214,7 @@ def loadconfigfile(dirs=['eelapp', 'config']):
 
 
 @eel.expose
-def deleteFiles(files):
+def deletefiles(files):
     """
         Delete the files.
     """
