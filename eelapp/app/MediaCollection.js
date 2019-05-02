@@ -100,7 +100,7 @@ class MediaCollection extends React.Component {
             this.lastRandomCards.push(currentCard.id);
 
         // Limit
-        while (this.lastRandomCards.length > (count / 5) * 4)
+        while (this.lastRandomCards.length > count * 0.8)
             this.lastRandomCards.splice(0, 1);
 
         if (e.keyCode === 78) {
