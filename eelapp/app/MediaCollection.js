@@ -100,7 +100,7 @@ class MediaCollection extends React.Component {
             this.lastRandomCards.push(currentCard.id);
 
         // Limit
-        while (this.lastRandomCards.length > count * 0.8)
+        while (this.lastRandomCards.length > (count / 5) * 4)
             this.lastRandomCards.splice(0, 1);
 
         if (e.keyCode === 78) {
@@ -112,6 +112,21 @@ class MediaCollection extends React.Component {
             this.lastRandomCards.push(cards[random].id);
 
             nextCard = cards[random];
+            window.scrollTo(0, nextCard.offsetTop);
+        } else if (e.keyCode === 66) {
+            // 'b' goes to the previous card
+
+            if (this.lastRandomCards.length < 2) return;
+
+            let previousCardIndex = this.lastRandomCards.length - 2;
+            let previousCardId = this.lastRandomCards[previousCardIndex];
+            let previousCard = cards.find(i => i.id == previousCardId);
+
+            // Move previous card id to the beginning
+            this.lastRandomCards.splice(previousCardIndex, 1);
+            this.lastRandomCards.splice(0, 0, previousCardId);
+
+            nextCard = previousCard;
             window.scrollTo(0, nextCard.offsetTop);
         } else if (e.keyCode === 74) {
             // 'j' goes to the next image
