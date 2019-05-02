@@ -53,17 +53,17 @@ class MediaCollection extends React.Component {
         let loopLimit = maxTries;
         while (loopLimit-- > 0 && !this.isInsideView(el, false)) {
             width -= step;
-            el.style.width = width + "px";
+            el.style.width = `${width}px`;
         }
 
         loopLimit = maxTries;
         while (loopLimit-- > 0 && this.isInsideView(el, false)) {
             width += step;
-            el.style.width = width + "px";
+            el.style.width = `${width}px`;
         }
 
         width -= padding;
-        el.style.width = width + "px";
+        el.style.width = `${width}px`;
     }
 
     handleKeyboard(e) {
@@ -127,27 +127,12 @@ class MediaCollection extends React.Component {
             this.lastRandomCards.splice(0, 0, previousCardId);
 
             nextCard = previousCard;
-            window.scrollTo(0, nextCard.offsetTop);
         } else if (e.keyCode === 74) {
             // 'j' goes to the next image
-
             nextCard = cards[currentIndex + 1];
-
-            if (nextCard !== void 0) {
-                window.scrollTo(0, nextCard.offsetTop);
-            } else {
-                window.scrollTo(0, currentCard.offsetTop);
-            }
         } else if (e.keyCode === 75) {
             // 'k' goes to the previous image
-
             nextCard = cards[currentIndex - 1];
-
-            if (nextCard !== void 0) {
-                window.scrollTo(0, nextCard.offsetTop);
-            } else {
-                window.scrollTo(0, currentCard.offsetTop);
-            }
         } else if (e.keyCode === 76) {
             // 'l' love toggle the image
             this.toggleLove(currentCard.id, null, currentCard.offsetTop);
@@ -159,6 +144,14 @@ class MediaCollection extends React.Component {
         // Tech for the chosen card
         if (!nextCard && currentCard) nextCard = currentCard;
         if (nextCard) {
+            // Scroll to
+            if (nextCard !== void 0) {
+                window.scrollTo(0, nextCard.offsetTop);
+            } else {
+                window.scrollTo(0, currentCard.offsetTop);
+            }
+
+            // Adjust window
             this.autoWidthToView(nextCard);
 
             // Autoplay when there is a video
