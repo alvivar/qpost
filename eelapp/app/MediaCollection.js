@@ -122,7 +122,7 @@ class MediaCollection extends React.Component {
             let previousCardId = this.lastRandomCards[previousCardIndex];
             let previousCard = cards.find(i => i.id == previousCardId);
 
-            // Move previous card id to the beginning
+            // Move the last element to the beginning
             this.lastRandomCards.splice(previousCardIndex, 1);
             this.lastRandomCards.splice(0, 0, previousCardId);
 
