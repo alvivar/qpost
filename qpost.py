@@ -15,6 +15,7 @@ import time
 from functools import reduce
 
 import eel
+from PIL import Image
 
 HOME = os.path.normpath(  # The script directory + cxfreeze compatibility
     os.path.dirname(
@@ -142,8 +143,41 @@ def loadpathfile(path, dirs=['eelapp', 'config']):
     except (IOError, ValueError):
         data = []
 
+    # Only existing files
+
     cleaned = [i for i in data if os.path.isfile(i['file'])]
-    # cleaned = sorted(cleaned, key=lambda k: os.path.getmtime(k['file']))
+
+    # Creation time calculation
+
+    for i in data:
+        if 'mtime' not in i:
+            i['mtime'] = os.path.getmtime(i['file'])
+
+    # Quick comparison score by JPG conversion
+
+    rgb_name = 'rgb128x128.jpg'
+    rgb_size = 128, 128
+
+    for i in data:
+        if rgb_name in i:
+            continue
+        try:
+            im = Image.open(i['file'])
+            rgb_im = im.convert('RGB')
+            rgb_im.thumbnail(rgb_size, Image.ANTIALIAS)
+            rgb_im.save(rgb_name)
+            i[rgb_name] = os.path.getsize(rgb_name)
+        except:
+            print(f"Error: {rgb_name}: {i['file']}")
+            i[rgb_name] = 0
+        else:
+            continue
+
+    if os.path.isfile(rgb_name):
+        os.remove(rgb_name)
+
+    cleaned = sorted(cleaned, key=lambda k: k[rgb_name])
+    # cleaned = sorted(cleaned, key=lambda k: k['mtime'])
 
     return cleaned
 
