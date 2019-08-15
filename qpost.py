@@ -13,6 +13,7 @@ import shutil
 import sys
 import time
 from functools import reduce
+from random import shuffle
 
 import eel
 from PIL import Image
@@ -240,6 +241,8 @@ def loadconfigfile(dirs=['eelapp', 'config']):
     ]
     data['recentPaths'] = reduce(lambda l, i: l if i in l else l + [i],
                                  existent_paths, [])  # Unique
+
+    # shuffle(data['recentPaths'])
 
     # data['recentPaths'] = sorted(
     #     data['recentPaths'], key=lambda x: len(get_files_dirs(x)[0]))
