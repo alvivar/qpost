@@ -1,6 +1,9 @@
 
         TO DO
 
+
+    After changing an image by removing it with 'i', videos doesn't get autofit
+
     Clean up cache
     One configuration file with all paths data
     Extract love ones into his own folder

@@ -260,4 +260,4 @@ def deletefiles(files):
             os.remove(f)
 
 
-eel.start('app.html', size=(10000, 10000))
+eel.start('app.html', size=(10000, 10000), options={'mode': 'firefox'}, suppress_error=True)
