@@ -4,3 +4,4 @@ eelapp/cache/
 eelapp/config/
 *.pyc
 *.spec
+sync.ffs_db
