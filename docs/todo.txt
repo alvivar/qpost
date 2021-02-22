@@ -1,6 +1,4 @@
 
-        TO DO
-
 
     After changing an image by removing it with 'i', videos doesn't get autofit
 
@@ -26,6 +24,7 @@
 
     bug Last image card in line, when ignored/unloved the scrollbar stays there
     bug Auto size first image?
+
 
     2019/05/01 06:38 pm
     x Shortcut to go back to the last image
