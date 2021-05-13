@@ -11,17 +11,16 @@ import json
 import os
 import shutil
 import sys
-import time
+# import time
 from functools import reduce
 from random import shuffle
 
 import eel
-from PIL import Image
+# from PIL import Image
 
 HOME = os.path.normpath(  # The script directory + cxfreeze compatibility
-    os.path.dirname(sys.executable if getattr(sys, "frozen", False) else __file__)
-)
-
+    os.path.dirname(
+        sys.executable if getattr(sys, "frozen", False) else __file__))
 
 eel.init("eelapp")
 
@@ -73,11 +72,11 @@ def allow_patterns(*patterns):
     Patterns is a sequence of glob-style patterns that are used to exclude
     files that don't match.
     """
-
     def _ignore_patterns(path, names):
 
         files_only = [
-            name for name in names if not os.path.isdir(os.path.join(path, name))
+            name for name in names
+            if not os.path.isdir(os.path.join(path, name))
         ]
 
         allowed_files = []
@@ -156,28 +155,28 @@ def loadpathfile(path, dirs=["eelapp", "config"]):
 
     # Quick comparison score by JPG conversion
 
-    rgb_name = "rgb128x128.jpg"
-    rgb_size = 128, 128
+    # rgb_name = "rgb128x128.jpg"
+    # rgb_size = 128, 128
 
-    for i in data:
-        if rgb_name in i:
-            continue
-        try:
-            im = Image.open(i["file"])
-            rgb_im = im.convert("RGB")
-            rgb_im.thumbnail(rgb_size, Image.ANTIALIAS)
-            rgb_im.save(rgb_name)
-            i[rgb_name] = os.path.getsize(rgb_name)
-        except:
-            print(f"Error: {rgb_name}: {i['file']}")
-            i[rgb_name] = 0
-        else:
-            continue
+    # for i in data:
+    #     if rgb_name in i:
+    #         continue
+    #     try:
+    #         im = Image.open(i["file"])
+    #         rgb_im = im.convert("RGB")
+    #         rgb_im.thumbnail(rgb_size, Image.ANTIALIAS)
+    #         rgb_im.save(rgb_name)
+    #         i[rgb_name] = os.path.getsize(rgb_name)
+    #     except:
+    #         print(f"Error: {rgb_name}: {i['file']}")
+    #         i[rgb_name] = 0
+    #     else:
+    #         continue
 
-    if os.path.isfile(rgb_name):
-        os.remove(rgb_name)
+    # if os.path.isfile(rgb_name):
+    #     os.remove(rgb_name)
 
-    cleaned = sorted(cleaned, key=lambda k: k[rgb_name])
+    # cleaned = sorted(cleaned, key=lambda k: k[rgb_name])
     # cleaned = sorted(cleaned, key=lambda k: k['mtime'])
 
     return cleaned
@@ -195,7 +194,10 @@ def saveqbotfile(path):
     qbot = {"messages": []}
     for data in pathdata:
         if not data["ignore"] and data["love"]:
-            qbot["messages"].append({"text": data["text"], "image": data["file"]})
+            qbot["messages"].append({
+                "text": data["text"],
+                "image": data["file"]
+            })
 
     qbotpath = os.path.join(path, "qbot.json")
     with open(qbotpath, "w") as f:
@@ -236,9 +238,8 @@ def loadconfigfile(dirs=["eelapp", "config"]):
     existent_paths = [
         os.path.normpath(i) for i in data["recentPaths"] if os.path.exists(i)
     ]
-    data["recentPaths"] = reduce(
-        lambda l, i: l if i in l else l + [i], existent_paths, []
-    )  # Unique
+    data["recentPaths"] = reduce(lambda l, i: l if i in l else l + [i],
+                                 existent_paths, [])  # Unique
 
     # shuffle(data['recentPaths'])
 
@@ -258,6 +259,7 @@ def deletefiles(files):
             os.remove(f)
 
 
-eel.start(
-    "app.html", size=(10000, 10000), options={"mode": "firefox"}, suppress_error=True
-)
+eel.start("app.html",
+          size=(9999, 9999),
+          options={"mode": "firefox"},
+          suppress_error=True)
