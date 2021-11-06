@@ -1,4 +1,7 @@
 
+    A refactor without React? It may be an oportunity to refresh simple js.
+    Sort by rank, tournament mode.
+
 
     After changing an image by removing it with 'i', videos doesn't get autofit
 
@@ -11,7 +14,6 @@
     Dashboard thumbnails
     Button shorcuts for each main part
 
-    Sort by rank
     Rename images by order
 
     Tags by folder
