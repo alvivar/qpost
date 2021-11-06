@@ -1,9 +1,10 @@
-__pycache__
 .vscode
 *.pyc
 *.spec
+
+__pycache__/
 build/
 dist/
-eelapp/cache/
-eelapp/config/
 sync.ffs_db
+web/cache/
+web/config/
