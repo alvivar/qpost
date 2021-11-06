@@ -64,7 +64,7 @@ class Main extends React.Component {
       let scannedData = localFiles.map(async (i, index) => ({
         id: await eel.flatname(i, true)(),
         file: files[index],
-        appFile: i.split('\\eelapp').pop(), // Path relative to Eel app
+        appFile: i.split('\\web').pop(), // Path relative to Eel app
         text: '',
         love: false,
         ignore: false,

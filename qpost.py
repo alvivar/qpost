@@ -24,7 +24,7 @@ HOME = os.path.normpath(  # The script directory + cxfreeze compatibility
     os.path.dirname(sys.executable if getattr(sys, "frozen", False) else __file__)
 )
 
-eel.init("eelapp")
+eel.init("web")
 
 
 @eel.expose
@@ -92,7 +92,7 @@ def allow_patterns(*patterns):
 
 
 @eel.expose
-def copytree(source, filesfilter=["*"], dirs=["eelapp", "cache"]):
+def copytree(source, filesfilter=["*"], dirs=["web", "cache"]):
     """
     Copy all files from the path into application directory. Return the
     name of the local path with the files.
@@ -111,7 +111,7 @@ def copytree(source, filesfilter=["*"], dirs=["eelapp", "cache"]):
 
 
 @eel.expose
-def savepathfile(path, data, dirs=["eelapp", "config"]):
+def savepathfile(path, data, dirs=["web", "config"]):
     """
     Create a json file with a unique name based on the 'path' that will
     contain the 'data'.
@@ -129,7 +129,7 @@ def savepathfile(path, data, dirs=["eelapp", "config"]):
 
 
 @eel.expose
-def loadpathfile(path, dirs=["eelapp", "config"]):
+def loadpathfile(path, dirs=["web", "config"]):
     """
     Return the data from the json file related to the 'path', cleaning
     files that doesn't exist.
@@ -204,7 +204,7 @@ def saveqbotfile(path):
 
 
 @eel.expose
-def saveconfigfile(data, dirs=["eelapp", "config"]):
+def saveconfigfile(data, dirs=["web", "config"]):
     """
     Save the data into the json file.
     """
@@ -220,7 +220,7 @@ def saveconfigfile(data, dirs=["eelapp", "config"]):
 
 
 @eel.expose
-def loadconfigfile(dirs=["eelapp", "config"]):
+def loadconfigfile(dirs=["web", "config"]):
     """
     Return the data from the json file.
     """
